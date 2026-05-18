@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda | Vanessa & Jonas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sobre-elegancia.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ════════════════════════════════════ SOBRE DE APERTURA -->
+<div id="pantalla-sobre">
+    <div class="sobre-marco">
+        <div class="sobre-borde"></div>
+
+        <!-- ╔══════════════════════════════════════════════════════════╗
+             ║  DECORACIÓN ESQUINAS DEL SOBRE DE APERTURA              ║
+             ║  Cambia los src="img/flor-X.png" por tus propias fotos  ║
+             ║  de flores, ramas o decoraciones personales              ║
+             ║  Tamaño recomendado: 120×120 px, fondo transparente (PNG)║
+             ║  Si la imagen no carga, se muestra la flor SVG de respaldo║
+             ╚══════════════════════════════════════════════════════════╝ -->
+        <div class="sobre-corners">
+            //Esto es del sobre de apertura, no del hero, puedes usar las mismas imágenes o diferentes. Recomendado PNG transparente, mínimo 120x120 px
+            <img src="img/Flores_lavanda.png" class="corner-img corner-tl" alt="" onerror="this.style.display='none'">
+            <img src="img/flor-tr.png" class="corner-img corner-tr" alt="" onerror="this.style.display='none'">
+            <img src="img/flor-bl.png" class="corner-img corner-bl" alt="" onerror="this.style.display='none'">
+            <img src="img/flor-br.png" class="corner-img corner-br" alt="" onerror="this.style.display='none'">
+        </div>
+
+        <div id="puerta-izq" class="puerta">
+            <img src="img/invi2.jpg" class="puerta-img puerta-img-izq" alt="">
+            <div class="puerta-letra letra-izq">V</div>
+            <div class="sobre-velo"></div>
+        </div>
+        <div id="puerta-der" class="puerta puerta-right">
+            <img src="img/invi2.jpg" class="puerta-img puerta-img-der" alt="">
+            <div class="puerta-letra letra-der">J</div>
+            <div class="sobre-velo"></div>
+        </div>
+
+        <div id="sello-clic">
+            <div class="sello-ring"></div>
+            <img src="img/sello.png" class="sello-img" alt="Sello">
+            <p class="sello-texto">Tocar para abrir</p>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════ MODAL SOBRE RSVP -->
+<div id="modal-rsvp" aria-modal="true" role="dialog" aria-label="Confirmar asistencia">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-sobre-wrap">
+
+        <!-- Solapa del sobre -->
+        <div class="modal-flap" id="modalFlap">
+            <span class="modal-flap-txt">V<span class="modal-flap-amp">&</span>J</span>
+        </div>
+
+        <!-- Cuerpo del sobre -->
+        <div class="modal-envelope">
+            <div class="modal-carta" id="modalCarta">
+
+                <!-- ╔════════════════════════════════════════════════════╗
+                     ║  ESQUINAS DECORATIVAS DE LA CARTA RSVP            ║
+                     ║  Mismas imágenes que las del sobre de apertura     ║
+                     ║  o puedes usar otras: src="img/flor-carta-X.png"  ║
+                     ╚════════════════════════════════════════════════════╝ -->
+                <div class="carta-corners">
+                    <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="cc-img cc-tl" alt="" onerror="this.style.display='none'">
+                    <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="cc-img cc-tr" alt="" onerror="this.style.display='none'">
+                    <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="cc-img cc-bl" alt="" onerror="this.style.display='none'">
+                    <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="cc-img cc-br" alt="" onerror="this.style.display='none'">
+                </div>
+
+                <button class="modal-cerrar" id="modalCerrar" aria-label="Cerrar">✕</button>
+
+                <div class="carta-contenido">
+                    <p class="carta-eyebrow">14 · Octubre · 2026</p>
+                    <p class="carta-deadline"><strong>Hasta el 1 de septiembre</strong> para confirmar tu asistencia</p>
+                    <h3 class="carta-title">Confirmar <em>Asistencia</em></h3>
+                    <div class="carta-divider"></div>
+                    <p id="mensajeBienvenida" class="carta-welcome">¡Hola! Qué alegría que estés aquí.</p>
+
+                    <form id="rsvpForm" class="rsvp-form">
+                        <div class="rsvp-field">
+                            <label class="rsvp-label">Familia / Invitado</label>
+                            <input type="text" name="nombre" id="inputNombre" readonly class="rsvp-input rsvp-input-ro">
+                        </div>
+                        <div class="rsvp-btns">
+                            <button type="button" id="btnAsistir" class="rsvp-btn rsvp-btn-si"><span>✦</span> Sí, asistiré</button>
+                            <button type="button" id="btnNoAsistir" class="rsvp-btn rsvp-btn-no"><span>✕</span> No podré</button>
+                        </div>
+                        <input type="hidden" name="asistencia" id="valorAsistencia" value="" required>
+                        <div id="seccionInvitados" class="rsvp-extra hidden">
+                            <div class="rsvp-field">
+                                <label class="rsvp-label">Pases Confirmados</label>
+                                <div class="pases-wrap">
+                                    <input type="number" name="cantidad" id="inputCantidad" value="1" min="1" class="rsvp-input pases-input">
+                                    <span id="labelMax" class="pases-max">de 1 pase reservado</span>
+                                </div>
+                                <span id="errorCantidad" class="rsvp-error hidden" aria-live="polite"></span>
+                            </div>
+                            <div class="rsvp-field">
+                                <p class="rsvp-note">Confirmar el nombre de las personas que asistirán.</p>
+                                <label class="rsvp-label">Nombres completos</label>
+                                <textarea name="nombres" id="inputNombres" class="rsvp-input rsvp-textarea"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" id="btnEnviar" class="rsvp-submit">Enviar Confirmación</button>
+                    </form>
+
+                    <div id="mensajeExito" class="rsvp-exito hidden">
+                        <div class="exito-flower">✦</div>
+                        <p class="exito-text">¡Pura Vida!</p>
+                        <p class="exito-sub">Confirmación guardada.<br>¡Nos vemos en octubre!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════ INVITACIÓN PRINCIPAL -->
+<div id="invitacion-main">
+
+    <!-- HERO -->
+    <header class="hero">
+        <img src="img/ima4.jpeg" class="hero-img" alt="Boda">
+        <div class="hero-overlay"></div>
+
+        <!-- ╔══════════════════════════════════════════════════════════╗
+             ║  IMÁGENES DE ESQUINAS DEL HERO                          ║
+             ║  Reemplaza las flores SVG con tus propias imágenes       ║
+             ║  src="img/hero-corner-tl.png"  ← esquina superior izq   ║
+             ║  src="img/hero-corner-tr.png"  ← esquina superior der   ║
+             ║  src="img/hero-corner-bl.png"  ← esquina inferior izq   ║
+             ║  src="img/hero-corner-br.png"  ← esquina inferior der   ║
+             ║  Recomendado: PNG transparente, mínimo 300×400 px        ║
+             ║  Si la imagen no carga, se muestra la rama SVG de respaldo║
+             ╚══════════════════════════════════════════════════════════╝DEL PRINCIO FOTOS  --> 
+        <div class="hero-corners" aria-hidden="true">
+            <img src="img/Flores_lavanda.png" class="hero-corner hc-tl branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda.png" class="hero-corner hc-tr branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda.png" class="hero-corner hc-bl branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda.png" class="hero-corner hc-br branch" alt="" onerror="this.style.display='none'">
+        </div>
+
+        <!-- Pétalos flotantes -->
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal p1"></div><div class="petal p2"></div>
+            <div class="petal p3"></div><div class="petal p4"></div>
+            <div class="petal p5"></div><div class="petal p6"></div>
+            <div class="petal p7"></div><div class="petal p8"></div>
+        </div>
+
+        <div class="hero-content">
+            <p class="hero-eyebrow">¡Nos Casamos!</p>
+            <div class="hero-divider-top"></div>
+            <h1 class="hero-title">Vanessa <span class="ampersand">&</span> Jonas</h1>
+        </div>
+
+        <div class="scroll-hint"><div class="scroll-chevron"></div></div>
+    </header>
+
+    <!-- CUENTA REGRESIVA -->
+    <section class="countdown-section">
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal p1"></div><div class="petal p2"></div>
+            <div class="petal p3"></div><div class="petal p4"></div>
+            <div class="petal p5"></div><div class="petal p6"></div>
+            <div class="petal p7"></div><div class="petal p8"></div>
+        </div>
+        <div class="countdown-bg-pattern" aria-hidden="true"></div>
+        <p class="countdown-label">Solo faltan...</p>
+        <div class="countdown-grid">
+            <div class="cd-unit"><span id="days" class="cd-num">00</span><span class="cd-word">Días</span></div>
+            <div class="cd-dot">·</div>
+            <div class="cd-unit"><span id="hours" class="cd-num">00</span><span class="cd-word">Horas</span></div>
+            <div class="cd-dot">·</div>
+            <div class="cd-unit"><span id="minutes" class="cd-num">00</span><span class="cd-word">Min</span></div>
+            <div class="cd-dot">·</div>
+            <div class="cd-unit"><span id="seconds" class="cd-num">00</span><span class="cd-word">Seg</span></div>
+        </div>
+    </section>
+
+    <!-- CITA -->
+    <section class="quote-section reveal">
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal p1"></div><div class="petal p2"></div>
+            <div class="petal p3"></div><div class="petal p4"></div>
+            <div class="petal p5"></div><div class="petal p6"></div>
+            <div class="petal p7"></div><div class="petal p8"></div>
+        </div>
+        <div class="quote-ornament" aria-hidden="true">✦</div>
+        <blockquote class="quote-text">"El amor no se mira, el amor se hace —<br>y juntos, lo haremos para siempre."</blockquote>
+        <div class="quote-line"></div>
+    </section>
+
+    <!-- ════════════════════ CARRUSEL DE FOTOS -->
+    <section class="carousel-section reveal">
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal p1"></div><div class="petal p2"></div>
+            <div class="petal p3"></div><div class="petal p4"></div>
+            <div class="petal p5"></div><div class="petal p6"></div>
+            <div class="petal p7"></div><div class="petal p8"></div>
+        </div>
+        <div class="section-ornament" aria-hidden="true">
+            <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.9"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
+        </div>
+        <h2 class="section-title">Nosotros</h2>
+        <p class="section-sub">Un vistazo de nuestro dia especial</p>
+
+        <!-- ╔══════════════════════════════════════════════════════════╗
+             ║  CARRUSEL DE FOTOS — agrega tantas como quieras          ║
+             ║  Cambia src="img/foto-N.jpg" por tus fotos               ║
+             ║  Tamaño recomendado: 1200×800 px, proporción 3:2          ║
+             ║  Para agregar más fotos: copia un bloque <div class="slide">║
+             ║  Para quitar fotos: elimina el bloque completo            ║
+             ╚══════════════════════════════════════════════════════════╝ -->
+        <div class="carousel-wrap">
+            <div class="carousel-track" id="carouselTrack">
+
+                <div class="slide">
+                    <img src="img/ima1.jpeg" alt="Foto 1" onerror="this.parentElement.classList.add('slide-ph')">
+                    <div class="slide-ph-txt">Foto 1 — reemplaza con img/foto-1.jpg</div>
+                </div>
+
+                <div class="slide">
+                    <img src="img/ima2.jpeg" alt="Foto 2" onerror="this.parentElement.classList.add('slide-ph')">
+                    <div class="slide-ph-txt">Foto 2 — reemplaza con img/foto-2.jpg</div>
+                </div>
+
+                <div class="slide">
+                    <img src="img/ima3.jpeg" alt="Foto 3" onerror="this.parentElement.classList.add('slide-ph')">
+                    <div class="slide-ph-txt">Foto 3 — reemplaza con img/foto-3.jpg</div>
+                </div>
+
+                <div class="slide">
+                    <img src="img/ima4.jpeg" alt="Foto 4" onerror="this.parentElement.classList.add('slide-ph')">
+                    <div class="slide-ph-txt">Foto 4 — reemplaza con img/foto-4.jpg</div>
+                </div>
+
+                <div class="slide">
+                    <img src="img/ima5.jpeg" alt="Foto 5" onerror="this.parentElement.classList.add('slide-ph')">
+                    <div class="slide-ph-txt">Foto 5 — reemplaza con img/foto-5.jpg</div>
+                </div>
+
+            </div>
+
+            <button class="carousel-btn cb-prev" id="carouselPrev" aria-label="Anterior">&#8592;</button>
+            <button class="carousel-btn cb-next" id="carouselNext" aria-label="Siguiente">&#8594;</button>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </section>
+
+    <!-- ════════════════════ LUGAR / VENUE -->
+    <section class="venue-section reveal">
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal p1"></div><div class="petal p2"></div>
+            <div class="petal p3"></div><div class="petal p4"></div>
+            <div class="petal p5"></div><div class="petal p6"></div>
+            <div class="petal p7"></div><div class="petal p8"></div>
+        </div>
+        <div class="venue-inner">
+            <div class="venue-text">
+                <div class="section-ornament" style="justify-content:flex-start;margin-bottom:12px">
+                    <svg viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg" width="170"><line x1="0" y1="20" x2="72" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="86" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><circle cx="100" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.9"/><circle cx="114" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><line x1="128" y1="20" x2="200" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
+                </div>
+                <h2 class="section-title venue-title">El Lugar</h2>
+                <p class="venue-name">Jardin Else Kientzler</p>
+                <p class="venue-address">Costa Rica · 14 Oct 2026</p>
+                <p class="venue-desc">Un espacio verde rodeado de naturaleza tropical — el escenario perfecto para celebrar nuestro amor bajo el cielo costarricense.</p>
+                <a class="venue-map-btn" href="https://maps.google.com/?q=Jardin+Else+Kientzler+Costa+Rica" target="_blank" rel="noopener">Ver en Google Maps ↗</a>
+            </div>
+
+            <!-- ╔════════════════════════════════════════════════════╗
+                 ║  FOTO DEL LUGAR — cambia src="img/venue.jpg"       ║
+                 ║  por una foto real del lugar de la boda             ║
+                 ║  Tamaño recomendado: 900×680 px                     ║
+                 ╚════════════════════════════════════════════════════╝ -->
+            <div class="venue-img-wrap">
+                <img src="img/JardinBotanico.jpg" alt="Jardin Else Kientzler" class="venue-img" onerror="this.parentElement.classList.add('venue-ph')">
+                <div class="venue-ph-txt">Foto del lugar · img/venue.jpg</div>
+                <div class="venue-img-frame"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ITINERARIO -->
+    <section class="itinerary-section reveal">
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal p1"></div><div class="petal p2"></div>
+            <div class="petal p3"></div><div class="petal p4"></div>
+            <div class="petal p5"></div><div class="petal p6"></div>
+            <div class="petal p7"></div><div class="petal p8"></div>
+        </div>
+        <div class="section-ornament" aria-hidden="true">
+            <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
+        </div>
+        <h2 class="section-title">Itinerario</h2>
+        <div class="section-ornament" aria-hidden="true">
+            <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
+        </div>
+        <div class="timeline">
+            <div class="tl-item reveal">
+                <div class="tl-time">4:30 PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">La Ceremonia</h4><p class="tl-sub">Jardin Else Kientzler, Costa Rica</p></div>
+            </div>
+            <div class="tl-item reveal">
+                <div class="tl-time">6:00 PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">Cóctel de Bienvenida</h4><p class="tl-sub">Puesta de sol & música en vivo</p></div>
+            </div>
+            <div class="tl-item reveal">
+                <div class="tl-time">8:00 PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">Cena & Celebración</h4><p class="tl-sub">Banquete tropical y fiesta</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP BANNER FINAL -->
+    <div class="rsvp-cta-banner reveal">
+        <p class="rsvp-cta-text">¿Ya confirmaste tu lugar?</p>
+        <button class="rsvp-cta-btn" id="btnAbrirModal2">Confirmar Asistencia ✦</button>
+    </div>
+
+    <!-- PANTALLA DE CONFIRMACIÓN FINAL -->
+    <div id="confirmacion-final" class="confirmacion-final hidden">
+        <div class="confirmacion-content">
+            <div class="confirmacion-petals" aria-hidden="true">
+                <div class="petal p1"></div><div class="petal p2"></div>
+                <div class="petal p3"></div><div class="petal p4"></div>
+                <div class="petal p5"></div><div class="petal p6"></div>
+                <div class="petal p7"></div><div class="petal p8"></div>
+            </div>
+            <div class="confirmacion-inner">
+                <div class="confirmacion-flor">✦</div>
+                <h2 class="confirmacion-title">¡Pura Vida!</h2>
+                <p class="confirmacion-message" id="confirmacionMessage">Confirmación guardada.<br>¡Nos vemos en octubre!</p>
+                <p class="confirmacion-detail" id="confirmacionDetail"></p>
+                <button class="confirmacion-btn" id="btnVolverInicio">Volver al inicio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <p class="footer-names">V & J</p>
+        <p class="footer-date">14 · 10 · 2026</p>
+        <p class="footer-loc">Jardin Else Kientzler · Costa Rica</p>
+    </footer>
+</div>
+
+    <script src="script/script.js"></script>
+</body>
+</html>

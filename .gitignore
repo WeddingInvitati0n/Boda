@@ -1,0 +1,26 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Editor
+.vscode/
+*.code-workspace
+
+# OS
+desktop.ini
+
+# Env
+.env
+
+# Logs
+logs/
+*.log
+
+# Build
+dist/
+build/
