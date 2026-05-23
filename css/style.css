@@ -181,6 +181,21 @@ body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-
 .dot{width:7px;height:7px;border-radius:50%;background:rgba(200,176,122,.35);border:1px solid rgba(200,176,122,.2);cursor:pointer;transition:background .3s,transform .3s,box-shadow .3s}
 .dot.activo{background:var(--gold);transform:scale(1.1);box-shadow:0 0 0 2px rgba(200,176,122,.14)}
 
+/* Música: control de vinilo */
+.music-control{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:8}
+.music-toggle{position:relative;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.98);border:1px solid rgba(200,176,122,.28);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 12px 22px rgba(15,20,12,.09);padding:0;overflow:hidden}
+.music-toggle:focus{outline:2px solid rgba(200,176,122,.28)}
+.vinyl-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;transition:transform .3s linear}
+.music-toggle.playing .vinyl-img{animation:spin 4s linear infinite}
+.vinyl-text{position:absolute;font-size:20px;color:#ffffff;font-weight:bold;z-index:2;text-shadow:0 2px 4px rgba(0,0,0,.3)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.music-label{font-size:11px;color:var(--text-lt);letter-spacing:.08em;text-align:center;max-width:86px}
+
+@media(max-width:480px){
+    .music-control{top:8px;right:8px}
+    .music-label{display:none}
+}
+
 /* ── VENUE ──────────────────────── */
 .venue-section{background:var(--green-dk);padding:80px 24px}
 .venue-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}

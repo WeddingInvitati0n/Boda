@@ -222,6 +222,14 @@
              ║  Para quitar fotos: elimina el bloque completo            ║
              ╚══════════════════════════════════════════════════════════╝ -->
         <div class="carousel-wrap">
+            <!-- Audio para la sección de fotos: coloca un archivo en audio/music.mp3 -->
+            <audio id="carouselAudio" src="img/musica.mp3" loop preload="none"></audio>
+            <div class="music-control">
+                <button id="musicToggle" class="music-toggle" aria-pressed="false" aria-label="Pausar música">
+                    <img src="img/vinilo.png" class="vinyl-img" alt="Vinilo">
+                    <span class="vinyl-text">♫</span>
+                </button>
+            </div>
             <div class="carousel-track" id="carouselTrack">
 
                 <div class="slide">

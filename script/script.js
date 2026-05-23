@@ -115,6 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    function escapeHTML(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
     cant.addEventListener('input', validarCantidad);
 
     function resetRsvp() {
@@ -142,11 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         sendBtn.innerText = 'ENVIANDO...'; sendBtn.disabled = true;
-        const data = Object.fromEntries(new FormData(e.target).entries());
+        const formDataObj = Object.fromEntries(new FormData(e.target).entries());
+        // Si por compatibilidad existía 'dieta', mapearlo a 'nombres'
+        if (formDataObj.dieta && !formDataObj.nombres) {
+            formDataObj.nombres = formDataObj.dieta;
+            delete formDataObj.dieta;
+        }
+        const payload = { ...formDataObj };
         try {
             const res = await fetch('https://sheetdb.io/api/v1/mtnhnv7jyyebe', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: [data] })
+                body: JSON.stringify({ data: [payload] })
             });
             if (!res.ok) throw new Error();
 
@@ -155,13 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
             exito.classList.remove('hidden');
             if (val.value === 'SI') {
                 exitoTitle.innerText = '¡Pura Vida!';
-                exitoSub.innerHTML = 'Confirmación guardada.<br>¡Nos vemos en octubre!';
+                exitoSub.innerHTML = 'Confirmación guardada.<br>¡Nos vemos en octubre!'
+                    + (payload.nombres ? `<br><small>Nombres: ${escapeHTML(payload.nombres)}</small>` : '');
             } else {
                 exitoTitle.innerText = 'Respuesta recibida';
                 exitoSub.innerHTML = 'Tu respuesta ha sido registrada.<br>¡Gracias por dejarnos saber!';
             }
-
-            // Dejar el mensaje de éxito visible dentro del modal
         } catch {
             alert('Error al enviar, intenta de nuevo.');
             sendBtn.innerText = 'Enviar Confirmación';
@@ -195,6 +204,67 @@ document.addEventListener('DOMContentLoaded', () => {
         function startAuto() { auto = setInterval(() => goTo(cur+1), 4500); }
         function resetAuto() { clearInterval(auto); startAuto(); }
         startAuto();
+    }
+
+    /* ── AUDIO/ MÚSICA DEL CARRUSEL ── */
+    const audio = document.getElementById('carouselAudio');
+    const musicBtn = document.getElementById('musicToggle');
+    const carouselSection = document.querySelector('.carousel-section');
+    let userPausedManually = false;
+
+    function updateMusicUI(isPlaying) {
+        if (!musicBtn) return;
+        musicBtn.classList.toggle('playing', !!isPlaying);
+        musicBtn.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+        musicBtn.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
+    }
+
+    if (musicBtn && audio) {
+        // Click en el botón: pausar o reanudar
+        musicBtn.addEventListener('click', async () => {
+            try {
+                if (audio.paused) {
+                    await audio.play();
+                    userPausedManually = false;
+                    updateMusicUI(true);
+                } else {
+                    audio.pause();
+                    userPausedManually = true;
+                    updateMusicUI(false);
+                }
+            } catch (err) {
+                console.warn('Reproducción bloqueada por el navegador:', err);
+            }
+        });
+
+        // Desbloqueo de audio al primer click
+        function unlockAudio() {
+            document.removeEventListener('click', unlockAudio);
+            audio.play().then(() => audio.pause()).catch(() => {});
+        }
+        document.addEventListener('click', unlockAudio, { once: true, passive: true });
+
+        // Observar visibilidad del carrusel: autoplay al entrar, pausar al salir
+        if (carouselSection && 'IntersectionObserver' in window) {
+            const visObs = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Entramos al carrusel: iniciar la música si el usuario no la pausó manualmente
+                        if (audio.paused && !userPausedManually) {
+                            audio.play().then(() => { updateMusicUI(true); }).catch(() => {});
+                        }
+                    } else {
+                        // Salimos del carrusel: pausar la música
+                        if (!audio.paused) {
+                            audio.pause();
+                            updateMusicUI(false);
+                            userPausedManually = false; // reiniciar la bandera para que autoplay funcione al volver
+                        }
+                    }
+                });
+            }, { threshold: 0.25 });
+            visObs.observe(carouselSection);
+        }
     }
 
     /* ── SCROLL REVEAL ──── */
