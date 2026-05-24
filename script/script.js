@@ -185,7 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let cur = 0, auto = null;
 
     if (slides.length > 0) {
-        slides.forEach((_, i) => {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === 0);
             const d = document.createElement('div');
             d.className = 'dot' + (i === 0 ? ' activo' : '');
             d.addEventListener('click', () => { goTo(i); resetAuto(); });
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         function goTo(i) {
             cur = ((i % slides.length) + slides.length) % slides.length;
-            track.style.transform = `translateX(-${cur * 100}%)`;
+            slides.forEach((slide, j) => slide.classList.toggle('active', j === cur));
             dotsW.querySelectorAll('.dot').forEach((d,j) => d.classList.toggle('activo', j === cur));
         }
         document.getElementById('carouselPrev').onclick = () => { goTo(cur-1); resetAuto(); };
