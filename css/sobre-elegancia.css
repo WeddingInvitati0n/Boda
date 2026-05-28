@@ -1,29 +1,56 @@
 /* ════════════════════════════════════════════════════════════════
-   PORTADA ELEGANTE - SOBRE DE APERTURA MEJORADO
+   PORTADA ELEGANTE - SOBRE DE APERTURA MEJORADO (PANTALLA COMPLETA)
    ════════════════════════════════════════════════════════════════ */
 
+/* Reseteo básico para asegurar que tome el 100% de la pantalla sin scroll */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corrección del espacio inferior: forzamos el color de fondo base desde la raíz */
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #8a967b; /* Evita destellos o bordes de otro color abajo */
+}
+
 #pantalla-sobre {
-  background: linear-gradient(135deg, #faf7f0 0%, #f5efe2 100%);
+  /* Ahora el contenedor principal es el sobre verde que cubre TODA la pantalla */
+  background: linear-gradient(135deg, #9ca98c 0%, #8a967b 100%);
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px; /* Mantiene la profundidad para tu animación 3D */
 }
 
 .sobre-marco {
-  box-shadow: 
-    0 60px 140px rgba(0,0,0,0.25),
-    0 20px 60px rgba(0,0,0,0.15),
-    0 0 0 1px rgba(255,255,255,0.5),
-    inset 0 0 40px rgba(255,255,255,0.3);
-  border-radius: 4px;
+  /* Al ser pantalla completa, el marco se fusiona con el fondo, pero mantenemos */
+  /* tu hermosa animación de entrada que escala y rota sutilmente la pantalla */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
   animation: aparecerSobreElegante 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: linear-gradient(135deg, #fdfbf7 0%, #faf7f0 100%);
+  /* Un sutil texturizado o brillo sobre el verde original */
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.05) 100%);
 }
 
 @keyframes aparecerSobreElegante {
   0% {
     opacity: 0;
-    transform: scale(0.88) rotateX(12deg) rotateZ(-2deg);
+    transform: scale(1.05) rotateX(8deg) rotateZ(-1deg);
   }
   50% {
-    transform: scale(1.02) rotateX(0) rotateZ(0);
+    transform: scale(1) rotateX(0) rotateZ(0);
   }
   100% {
     opacity: 1;
@@ -32,83 +59,167 @@
 }
 
 .sobre-borde {
-  border-color: rgba(200, 176, 122, 0.35);
-  inset: 10px;
+  /* Modificado a porcentaje (4%) para que el borde dorado dibuje */
+  /* una ventana perfecta sin importar si es monitor o celular */
+  position: absolute;
+  border: 1px solid rgba(230, 215, 180, 0.4); 
+  inset: 4%;
   border-radius: 2px;
-  box-shadow: inset 0 0 30px rgba(200, 176, 122, 0.08);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.05);
+  pointer-events: none;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   ELEMENTOS BOTÁNICOS - LAS 4 ESQUINAS FLUIDAS
+   ════════════════════════════════════════════════════════════════ */
+.flor-esquina {
+  position: absolute;
+  /* Controla el tamaño de los ramos proporcionalmente al tamaño de la pantalla */
+  width: clamp(100px, 18vw, 260px); 
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Posicionamiento exacto alineado con el 4% del recuadro dorado */
+.flor-top-left {
+  top: 4%;
+  left: 4%;
+}
+
+.flor-top-right {
+  top: 4%;
+  right: 4%;
+  transform: scaleX(-1); /* Espejo horizontal si usas la misma imagen */
+}
+
+.flor-bottom-left {
+  bottom: 4%;
+  left: 4%;
+  transform: scaleY(-1); /* Espejo vertical si usas la misma imagen */
+}
+
+.flor-bottom-right {
+  bottom: 4%;
+  right: 4%;
+  transform: scale(-1); /* Espejo completo si usas la misma imagen */
+}
+
+
+#sello-clic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Usamos translate estricto para anclar el bloque al centro de la pantalla */
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column; /* Apila de forma perfecta: letras -> sello -> texto guía */
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* Espaciado simétrico controlado */
+  z-index: 50;
+  cursor: pointer;
+}
+
+/* Efecto levitación armónico que mueve todo el conjunto junto */
+#sello-clic:hover {
+  transform: translate(-50%, -52%);
+}
+
+
+
+.puerta-letra {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+ font-size: clamp(45px, 7vw, 75px);
+  font-weight: 300;
+  color: rgba(245, 235, 200, 0.95); /* Color crema sedoso */
+  user-select: none;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(-9px);
+
+}
+/* --- CONTENEDOR AISLADO PARA EL SELLO Y SU PULSO --- */
+.sello-wrapper {
+  position: relative; /* Crea el punto de origen (0,0) exacto para el pulso */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* CAMBIO: Sello más grande y dominante en la composición */
+  width: clamp(140px, 25vw, 185px); 
+  height: clamp(140px, 25vw, 185px);
+}
+
+/* --- EL PULSO ENRAIZADO MATEMÁTICAMENTE --- */
 .sello-ring {
-  border: 2px solid rgba(200, 160, 60, 0.6);
-  animation: pulsoElegante 3s ease-in-out infinite;
-  box-shadow: 
-    0 0 30px rgba(200, 160, 60, 0.15),
-    inset 0 0 20px rgba(200, 160, 60, 0.05);
+  position: absolute;
+  top: 95%;
+  left: 50%;
+  /* Nace forzosamente desde el centro de la imagen */
+  transform: translate(-25%, -25%) scale(1);
+  width: 50%;  /* Ajustado al contorno inicial de la cera */
+  height: 50%;
+  border: 2px solid rgba(230, 215, 180, 0.45);
+  border-radius: 50%;
+  z-index: 1; /* Pasa por detrás del relieve metálico */
+  pointer-events: none;
+  box-shadow: 0 0 15px rgba(230, 215, 180, 0.1);
+  animation: pulsoMatematicoPerfecto 2.8s ease-in-out infinite;
 }
 
-@keyframes pulsoElegante {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.6;
-    box-shadow: 
-      0 0 30px rgba(200, 160, 60, 0.15),
-      inset 0 0 20px rgba(200, 160, 60, 0.05);
-  }
-  50% {
-    transform: scale(1.22);
-    opacity: 0.1;
-    box-shadow: 
-      0 0 60px rgba(200, 160, 60, 0.05),
-      inset 0 0 10px rgba(200, 160, 60, 0.02);
-  }
-}
-
-.sello-img {
-  filter: drop-shadow(0 8px 28px rgba(0,0,0,0.3));
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-#sello-clic:hover .sello-img {
-  transform: scale(1.06) rotate(3deg);
-}
-
-.sello-texto {
-  font-size: 10.5px;
-  font-weight: 400;
-  letter-spacing: 0.6em;
-  color: rgba(46, 42, 32, 0.7);
-  animation: parpadeoElegante 3s ease-in-out infinite;
-}
-
-@keyframes parpadeoElegante {
-  0%, 100% {
-    opacity: 0.75;
+@keyframes pulsoMatematicoPerfecto {
+  0% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(230, 215, 180, 0.4);
   }
   50% {
     opacity: 0.25;
+    /* La onda se expande limpia un 35% hacia afuera de los bordes del sello */
+    transform: translate(-50%, -50%) scale(1.35); 
+    box-shadow: 0 0 20px 6px rgba(230, 215, 180, 0.25);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.55);
+    opacity: 0;
+    box-shadow: 0 0 40px 12px rgba(230, 215, 180, 0);
   }
 }
 
-.puerta-letra {
-  color: rgba(245, 235, 200, 0.95);
-  text-shadow: 
-    0 6px 32px rgba(0, 0, 0, 0.25),
-    0 0 24px rgba(26, 48, 40, 0.15),
-    0 2px 12px rgba(0, 0, 0, 0.1);
-  letter-spacing: -2px;
+/* --- LA IMAGEN DEL SELLO DE LACRE --- */
+.sello-img {
+  position: relative;
+  width: 140%;
+  height: 140%;
+  object-fit: contain;
+  z-index: 2; /* Cubre el punto de origen de la animación del pulso */
+  filter: drop-shadow(0 10px 24px rgba(40, 48, 32, 0.38)) 
+          drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
+  transition: transform 0.4s ease;
 }
 
-#sello-clic {
-  animation: floatSello 3.5s ease-in-out infinite;
+#sello-clic:hover .sello-img {
+  transform: scale(1.05) rotate(2deg); /* Reacción elegante táctil */
 }
 
-@keyframes floatSello {
-  0%, 100% {
-    transform: translate(-50%, -50%);
-  }
-  50% {
-    transform: translate(-50%, -58%);
-  }
+/* --- TEXTO DE GUÍA INFERIOR (TOCAR PARA ABRIR) --- */
+.sello-texto {
+  font-size: clamp(9px, 1.2vw, 11px); /* Pequeña, limpia y muy legible */
+  font-weight: 400;
+  letter-spacing: 0.55em; /* Estilo tipográfico de papelería editorial */
+  text-transform: uppercase;
+  color: rgba(245, 235, 200, 0.65); /* Crema suave para romper el contraste duro */
+  animation: parpadeoElegante 2.5s ease-in-out infinite;
+  white-space: nowrap;
+  position: relative;
+  bottom: auto; /* Desvinculado del suelo de la pantalla */
+  width: auto;
+  text-align: center;
+  margin-top: 15px;
 }
 
-/* Añadir brillo sutil al fondo del sobre */
+@keyframes parpadeoElegante {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 0.2; }
+}
