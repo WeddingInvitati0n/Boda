@@ -10,37 +10,140 @@
 html{scroll-behavior:smooth}
 body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-x:hidden}
 
-/* ── SOBRE APERTURA ─────────────── */
-#pantalla-sobre{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--cream);transition:opacity 1s ease,filter 1s ease}
-#pantalla-sobre.desvanecer{opacity:0;filter:blur(14px);pointer-events:none}
-.sobre-marco{position:relative;width:min(440px,92vw,calc(92vh * 3 / 4.2));max-height:min(92vh,calc(92vw * 4.2 / 3));aspect-ratio:3/4.2;perspective:2200px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.22),0 0 1px rgba(0,0,0,.15),inset 0 0 0 1px rgba(255,255,255,.1);border-radius:3px;animation:aparecerSobre .8s cubic-bezier(0.22,1,0.36,1)}
-@keyframes aparecerSobre{from{opacity:0;transform:scale(.92) rotateX(8deg)}to{opacity:1;transform:scale(1) rotateX(0)}}
-.sobre-borde{position:absolute;inset:8px;border:1px solid rgba(200,176,122,0.45);z-index:42;pointer-events:none;border-radius:1px}
-.sobre-corners{position:absolute;inset:0;z-index:43;pointer-events:none}
-.corner-img,.corner-svg{position:absolute;width:130px;height:130px}
-.corner-img{object-fit:contain}
-.corner-tl,.corner-svg-tl{top:0;left:0}
-.corner-tr,.corner-svg-tr{top:0;right:0;transform:scaleX(-1)}
-.corner-bl,.corner-svg-bl{bottom:0;left:0;transform:scaleY(-1)}
-.corner-br,.corner-svg-br{bottom:0;right:0;transform:scale(-1)}
-.puerta{position:absolute;top:0;left:0;width:50%;height:100%;z-index:20;transform-origin:left;transition:transform 1.9s cubic-bezier(0.4,0,0.2,1),opacity 1.9s ease,filter 1.9s ease;overflow:hidden;backface-visibility:hidden}
-.puerta-right{left:auto;right:0;transform-origin:right}
-.puerta-img{display:block;position:absolute;top:0;width:200%;height:100%;object-fit:cover}
-.puerta-img-izq{left:0;object-position:left}
-.puerta-img-der{right:0;left:auto;object-position:right}
-.sobre-velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(200,160,60,0.08) 0%,rgba(30,48,40,0.2) 100%)}
-.puerta-letra{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--serif);font-size:clamp(80px,18vw,130px);font-style:italic;font-weight:300;color:rgba(245,235,200,0.88);text-shadow:0 4px 24px rgba(0,0,0,0.2);user-select:none;line-height:1}
-.letra-izq{right:16px}.letra-der{left:16px}
-.puerta.abrir-izq{transform:rotateY(-112deg);opacity:0.12;filter:brightness(0.55)}
-.puerta.abrir-der{transform:rotateY(112deg);opacity:0.12;filter:brightness(0.55)}
-#sello-clic{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:14px;transition:transform .4s ease,opacity .5s ease}
-#sello-clic:hover{transform:translate(-50%,-52%) scale(1.08)}
-#sello-clic.desaparecer{opacity:0;pointer-events:none}
-.sello-ring{position:absolute;width:110px;height:110px;border:1px solid rgba(200,160,60,0.5);border-radius:50%;animation:pulso 2.5s ease-in-out infinite}
-@keyframes pulso{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.18);opacity:.15}}
-.sello-img{width:clamp(88px,22vw,110px);filter:drop-shadow(0 6px 20px rgba(0,0,0,0.25))}
-.sello-texto{font-size:10px;font-weight:300;letter-spacing:.5em;text-transform:uppercase;color:rgba(46,42,32,0.55);animation:parpadeo 2.2s ease-in-out infinite;white-space:nowrap}
-@keyframes parpadeo{0%,100%{opacity:.6}50%{opacity:.2}}
+/* ── SOBRE APERTURA (REAJUSTADO A PANTALLA COMPLETA) ─────────────── */
+#pantalla-sobre {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Forzamos el color verde base desde el fondo para que jamás queden franjas crema abajo */
+  background: linear-gradient(135deg, #9ca98c 0%, #8a967b 100%); 
+  transition: opacity 1s ease, filter 1s ease;
+}
+
+#pantalla-sobre.desvanecer {
+  opacity: 0;
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.sobre-marco {
+  position: relative;
+  /* MODIFICACIÓN CLAVE: Quitamos la tarjeta rígida y dejamos que sea el 100% de la pantalla */
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height para solucionar el error en móviles */
+  
+  /* Quitamos las proporciones restrictivas que causaban el espacio abajo */
+  max-height: none; 
+  aspect-ratio: auto; 
+  
+  perspective: 2200px;
+  overflow: hidden;
+  box-shadow: none; /* Ya no requiere sombra de tarjeta porque es inmersivo */
+  border-radius: 0; /* Bordes rectos para fundirse con la pantalla */
+  animation: aparecerSobre .8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes aparecerSobre {
+  from { opacity: 0; transform: scale(1.03) rotateX(4deg); }
+  to { opacity: 1; transform: scale(1) rotateX(0); }
+}
+
+.sobre-borde {
+  position: absolute;
+  /* Cambiado de 8px fijos a 4% para que el marco dorado sea proporcional a la pantalla */
+  inset: 4%; 
+  border: 1px solid rgba(230, 215, 180, 0.45); /* Un tono oro más suave y fino */
+  z-index: 42;
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+.sobre-corners {
+  position: absolute;
+  /* Alineamos las flores de las esquinas exactamente con el 4% del marco dorado */
+  inset: 4%; 
+  z-index: 43;
+  pointer-events: none;
+}
+
+.corner-img, .corner-svg {
+  position: absolute;
+  /* Hacemos que el tamaño de los ramos de flores varíe según el tamaño de la pantalla */
+  width: clamp(100px, 16vw, 240px);
+  height: clamp(100px, 16vw, 240px);
+}
+.corner-img { object-fit: contain; }
+
+/* Posicionamiento exacto en los extremos del recuadro */
+.corner-tl, .corner-svg-tl { top: 0; left: 0; }
+.corner-tr, .corner-svg-tr { top: 0; right: 0; transform: scaleX(-1); }
+.corner-bl, .corner-svg-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.corner-br, .corner-svg-br { bottom: 0; right: 0; transform: scale(-1); }
+
+/* ── PUERTAS EN DOS MITADES DE PANTALLA ── */
+.puerta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 20;
+  transform-origin: left;
+  transition: transform 1.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.9s ease, filter 1.9s ease;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.puerta-right {
+  left: auto;
+  right: 0;
+  transform-origin: right;
+}
+
+.puerta-img {
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+}
+.puerta-img-izq { left: 0; object-position: left; }
+.puerta-img-der { right: 0; left: auto; object-position: right; }
+
+.sobre-velo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+/* ── COMPOSICIÓN CENTRADA: LETRAS Y SELLO (REDISEÑO DE BALANCE) ── */
+.puerta-letra {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* Tipografía fluida que se escala hermosamente sin romper el centro */
+  font-size: clamp(65px, 12vw, 140px); 
+  font-style: italic;
+  font-family: 'Playfair Display', 'Didot', serif;
+  font-weight: 300;
+  color: rgba(245, 240, 225, 0.95); /* Color crema sedoso de alta costura */
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  user-select: none;
+  line-height: 1;
+}
+
+/* Acercamos las letras al centro para que abracen de forma armónica al sello */
+.letra-izq { right: clamp(25px, 5vw, 65px); }
+.letra-der { left: clamp(25px, 5vw, 65px); }
+
+.puerta.abrir-izq { transform: rotateY(-112deg); opacity: 0.12; filter: brightness(0.55); }
+.puerta.abrir-der { transform: rotateY(112deg); opacity: 0.12; filter: brightness(0.55); }
+
 
 /* ── MODAL SOBRE RSVP ───────────── */
 #modal-rsvp{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s ease;padding:16px}
@@ -187,7 +290,7 @@ body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-
 .dot.activo{background:var(--gold);transform:scale(1.1);box-shadow:0 0 0 2px rgba(200,176,122,.14)}
 
 /* Música: control de vinilo */
-.music-control{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:8}
+.music-control{position:fixed;top:12px;right:12px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:8}
 .music-toggle{position:relative;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.98);border:1px solid rgba(200,176,122,.28);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 12px 22px rgba(15,20,12,.09);padding:0;overflow:hidden}
 .music-toggle:focus{outline:2px solid rgba(200,176,122,.28)}
 .vinyl-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;transition:transform .3s linear}
@@ -195,6 +298,8 @@ body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-
 .vinyl-text{position:absolute;font-size:20px;color:#ffffff;font-weight:bold;z-index:2;text-shadow:0 2px 4px rgba(0,0,0,.3)}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .music-label{font-size:11px;color:var(--text-lt);letter-spacing:.08em;text-align:center;max-width:86px}
+
+
 
 @media(max-width:480px){
     .music-control{top:8px;right:8px}
@@ -271,3 +376,4 @@ body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-
     .cd-dot{display:none}.countdown-grid{gap:24px}
     .carousel-btn{width:36px;height:36px;font-size:15px}.cb-prev{left:6px}.cb-next{right:6px}
 }
+
