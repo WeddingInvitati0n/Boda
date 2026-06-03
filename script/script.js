@@ -32,6 +32,32 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ── URL PARAMS ────── */
     const p = new URLSearchParams(window.location.search);
     const n = p.get('n'), ps = p.get('p');
+
+    function offerGermanTranslation() {
+        const alreadyAsked = localStorage.getItem('invitationGermanTranslationAsked');
+        if (alreadyAsked) return;
+
+        fetch('https://ipapi.co/json/', { cache: 'no-store' })
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(data => {
+                const countryCode = String(data.country_code || '').toUpperCase();
+                const browserLang = String(navigator.language || '').toLowerCase();
+
+                if (countryCode === 'DE' || browserLang.startsWith('de')) {
+                    localStorage.setItem('invitationGermanTranslationAsked', '1');
+                    setTimeout(() => {
+                        const shouldTranslate = window.confirm('Parece que estás en Alemania. ¿Quieres traducir esta invitación al alemán?');
+                        if (shouldTranslate) {
+                            const targetUrl = encodeURIComponent(window.location.href);
+                            window.open(`https://translate.google.com/translate?sl=es&tl=de&u=${targetUrl}`, '_blank', 'noopener');
+                        }
+                    }, 900);
+                }
+            })
+            .catch(() => {});
+    }
+
+    offerGermanTranslation();
     if (n) {
         const nl = n.replace(/-/g,' ');
         document.getElementById('inputNombre').value = nl;
@@ -147,17 +173,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         sendBtn.innerText = 'ENVIANDO...'; sendBtn.disabled = true;
         const formDataObj = Object.fromEntries(new FormData(e.target).entries());
-        // Si por compatibilidad existía 'dieta', mapearlo a 'nombres'
-        if (formDataObj.dieta && !formDataObj.nombres) {
-            formDataObj.nombres = formDataObj.dieta;
-            delete formDataObj.dieta;
-        }
         const payload = { ...formDataObj };
-        try {
-            const res = await fetch('https://sheetdb.io/api/v1/mtnhnv7jyyebe', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+
+        async function enviarRespuesta() {
+            const nombre = String(payload.nombre || '').trim();
+            if (nombre) {
+                try {
+                    const searchRes = await fetch(`https://sheetdb.io/api/v1/mtnhnv7jyyebe/search?nombre=${encodeURIComponent(nombre)}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    if (searchRes.ok) {
+                        const filas = await searchRes.json();
+                        const fila = Array.isArray(filas) ? filas.find(f => String(f.nombre || '').trim().toLowerCase() === nombre.toLowerCase()) : null;
+                        if (fila && (fila.id || fila._id)) {
+                            const rowId = fila.id || fila._id;
+                            const updateRes = await fetch(`https://sheetdb.io/api/v1/mtnhnv7jyyebe/id/${rowId}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ data: payload })
+                            });
+                            if (updateRes.ok) return updateRes;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('No se pudo actualizar la fila existente, se intentará crear una nueva.', err);
+                }
+            }
+
+            return fetch('https://sheetdb.io/api/v1/mtnhnv7jyyebe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ data: [payload] })
             });
+        }
+
+        try {
+            const res = await enviarRespuesta();
             if (!res.ok) throw new Error();
 
             // Mostrar mensaje de éxito dentro del modal y mantener la X para cerrar
@@ -207,10 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
         startAuto();
     }
 
-    /* ── AUDIO/ MÚSICA DEL CARRUSEL ── */
+    /* ── AUDIO / MÚSICA GLOBAL DE LA INVITACIÓN ── */
     const audio = document.getElementById('carouselAudio');
     const musicBtn = document.getElementById('musicToggle');
-    const carouselSection = document.querySelector('.carousel-section');
     let userPausedManually = false;
 
     function updateMusicUI(isPlaying) {
@@ -221,7 +273,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (musicBtn && audio) {
-        // Click en el botón: pausar o reanudar
+        function startAudio() {
+            if (audio.paused && !userPausedManually) {
+                audio.play().then(() => updateMusicUI(true)).catch(() => {});
+            }
+        }
+
         musicBtn.addEventListener('click', async () => {
             try {
                 if (audio.paused) {
@@ -238,34 +295,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Desbloqueo de audio al primer click
-        function unlockAudio() {
-            document.removeEventListener('click', unlockAudio);
-            audio.play().then(() => audio.pause()).catch(() => {});
-        }
-        document.addEventListener('click', unlockAudio, { once: true, passive: true });
-
-        // Observar visibilidad del carrusel: autoplay al entrar, pausar al salir
-        if (carouselSection && 'IntersectionObserver' in window) {
-            const visObs = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Entramos al carrusel: iniciar la música si el usuario no la pausó manualmente
-                        if (audio.paused && !userPausedManually) {
-                            audio.play().then(() => { updateMusicUI(true); }).catch(() => {});
-                        }
-                    } else {
-                        // Salimos del carrusel: pausar la música
-                        if (!audio.paused) {
-                            audio.pause();
-                            updateMusicUI(false);
-                            userPausedManually = false; // reiniciar la bandera para que autoplay funcione al volver
-                        }
-                    }
-                });
-            }, { threshold: 0.25 });
-            visObs.observe(carouselSection);
-        }
+        document.addEventListener('click', startAudio, { once: true, passive: true });
+        document.addEventListener('touchstart', startAudio, { once: true, passive: true });
     }
 
     /* ── SCROLL REVEAL ──── */
