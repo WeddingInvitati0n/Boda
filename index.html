@@ -16,37 +16,37 @@
     <div class="sobre-marco">
         <div class="sobre-borde"></div>
 
-        <!-- ╔══════════════════════════════════════════════════════════╗
-             ║  DECORACIÓN ESQUINAS DEL SOBRE DE APERTURA              ║
-             ║  Cambia los src="img/flor-X.png" por tus propias fotos  ║
-             ║  de flores, ramas o decoraciones personales              ║
-             ║  Tamaño recomendado: 120×120 px, fondo transparente (PNG)║
-             ║  Si la imagen no carga, se muestra la flor SVG de respaldo║
-             ╚══════════════════════════════════════════════════════════╝ -->
         <div class="sobre-corners">
-            //Esto es del sobre de apertura, no del hero, puedes usar las mismas imágenes o diferentes. Recomendado PNG transparente, mínimo 120x120 px
-            <img src="img/Flores_lavanda.png" class="corner-img corner-tl" alt="" onerror="this.style.display='none'">
-            <img src="img/flor-tr.png" class="corner-img corner-tr" alt="" onerror="this.style.display='none'">
-            <img src="img/flor-bl.png" class="corner-img corner-bl" alt="" onerror="this.style.display='none'">
-            <img src="img/flor-br.png" class="corner-img corner-br" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="corner-img corner-tl" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="corner-img corner-tr" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="corner-img corner-bl" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_invitacionconfirmacion-removebg-preview.png" class="corner-img corner-br" alt="" onerror="this.style.display='none'">
         </div>
 
         <div id="puerta-izq" class="puerta">
             <img src="img/invi2.jpg" class="puerta-img puerta-img-izq" alt="">
-            <div class="puerta-letra letra-izq">V</div>
             <div class="sobre-velo"></div>
         </div>
         <div id="puerta-der" class="puerta puerta-right">
             <img src="img/invi2.jpg" class="puerta-img puerta-img-der" alt="">
-            <div class="puerta-letra letra-der">J</div>
             <div class="sobre-velo"></div>
         </div>
 
         <div id="sello-clic">
-            <div class="sello-ring"></div>
-            <img src="img/sello.png" class="sello-img" alt="Sello">
+            
+            <div class="monograma-letras">
+                <span class="puerta-letra letra-izq">V</span>
+                <span class="puerta-letra letra-der">J</span>
+            </div>
+            
+            <div class="sello-wrapper">
+                <div class="sello-ring"></div>
+                <img src="img/sello.png" class="sello-img" alt="Sello">
+            </div>
+            
             <p class="sello-texto">Tocar para abrir</p>
         </div>
+
     </div>
 </div>
 
@@ -126,6 +126,13 @@
 
 <!-- ════════════════════════════════════ INVITACIÓN PRINCIPAL -->
 <div id="invitacion-main">
+    <audio id="carouselAudio" src="img/musica.mp3" loop preload="none"></audio>
+    <div class="music-control global-music">
+        <button id="musicToggle" class="music-toggle" aria-pressed="false" aria-label="Pausar música">
+            <img src="img/vinilo.png" class="vinyl-img" alt="Vinilo">
+            <span class="vinyl-text">♫</span>
+        </button>
+    </div>
 
     <!-- HERO -->
     <header class="hero">
@@ -212,7 +219,7 @@
             <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.9"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
         </div>
         <h2 class="section-title">Nosotros</h2>
-        <p class="section-sub">Un vistazo de nuestro dia especial</p>
+        <p class="section-sub">Un vistazo de nuestro de nuestra historia</p>
 
         <!-- ╔══════════════════════════════════════════════════════════╗
              ║  CARRUSEL DE FOTOS — agrega tantas como quieras          ║
@@ -318,20 +325,55 @@
         </div>
         <div class="timeline">
             <div class="tl-item reveal">
-                <div class="tl-time">4:30 PM</div>
+                <div class="tl-time">03:30 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">La Ceremonia</h4><p class="tl-sub">Jardin Else Kientzler, Costa Rica</p></div>
+                <div class="tl-card"><h4 class="tl-title">Ingreso de invitados</h4>
+                    <p class="tl-sub">Bienvenidos a nuestro día especial</p></div>
             </div>
             <div class="tl-item reveal">
-                <div class="tl-time">6:00 PM</div>
+                <div class="tl-time">04:00 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Cóctel de Bienvenida</h4><p class="tl-sub">Puesta de sol & música en vivo</p></div>
+                <div class="tl-card"><h4 class="tl-title">Inicio de la Ceremonia</h4>
+                    <p class="tl-sub">El momenro del "Si, acepto"</p></div>
             </div>
             <div class="tl-item reveal">
-                <div class="tl-time">8:00 PM</div>
+                <div class="tl-time">05:00 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Cena & Celebración</h4><p class="tl-sub">Banquete tropical y fiesta</p></div>
+                <div class="tl-card"><h4 class="tl-title">Recepción y Cóctel</h4>
+                    <p class="tl-sub">Ingreso de los invitados a recepcion</p>
+                    <p class="tl-sub">Frutas, Dips, Empanas y café</p></div>
             </div>
+            <div class="tl-item reveal">
+                <div class="tl-time">05:35 PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">Entrada de los Novios</h4>
+                    <p class="tl-sub">Brindis y cancion especial</p>
+                    <p class="tl-sub">Baile de los esposos</p>
+                </div>
+            </div>
+            <div class="tl-item reveal">
+                <div class="tl-time">06:00 PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">Cena</h4>
+                    <p class="tl-sub">Banquete servido a la mesa y bocas</p></div>
+            </div>
+            <div class="tl-item reveal">
+                <div class="tl-time">06:45 PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">Actividades</h4>
+                    <p class="tl-sub">Photobooth ( 2 horas disponible)</p>
+                    <p class="tl-sub">Actividad de la liga y bouquet</p>
+                    <p class="tl-sub">Apertura de la mesa de dulces 8:00 PM</p>
+                </div>
+            </div>
+            <div class="tl-item reveal">
+                <div class="tl-time">09:30PM</div>
+                <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
+                <div class="tl-card"><h4 class="tl-title">Cierre del evento</h4>
+                    <p class="tl-sub">Gracias por acompañarnos</p></div>
+            </div>
+            
+
         </div>
     </section>
 
