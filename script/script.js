@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarErrorCantidad(copy[currentLang].maxPasses(max));
             return false;
         }
-        box = ocultarErrorCantidad();
+        ocultarErrorCantidad();
         return true;
     }
 
