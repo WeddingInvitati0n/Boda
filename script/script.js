@@ -135,15 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const b1      = document.getElementById('btnAbrirModal');
     const b2      = document.getElementById('btnAbrirModal2');
 
-    function abrirModal()  { if (modal) { modal.classList.add('abierto'); document.body.style.overflow = 'hidden'; } }
-    function cerrarModal() { if (modal) { modal.classList.remove('abierto'); document.body.style.overflow = 'auto'; } }
-
-    if (b1) b1.addEventListener('click', abrirModal);
-    if (b2) b2.addEventListener('click', abrirModal);
-    if (cerrar) cerrar.addEventListener('click', cerrarModal);
-    if (back) back.addEventListener('click', cerrarModal);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
-
     /* ── RSVP LÓGICA ────── */
     const btnSi = document.getElementById('btnAsistir');
     const btnNo = document.getElementById('btnNoAsistir');
@@ -162,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return String(nombre || '').trim().toLowerCase().replace(/\s+/g, ' ');
     }
 
-    // Cambiado para simplificar y asegurar consistencia
     function rsvpLockKey(nombre) {
         const partes = [rsvpLockPrefix, normalizarNombre(nombre)].filter(Boolean);
         return partes.join('|');
@@ -212,7 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function escapeHTML(str) {
-        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        var amp = '&';
+        return String(str).replace(/&/g, amp + 'amp;').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, '&#39;');
     }
 
     cant.addEventListener('input', validarCantidad);
@@ -238,12 +229,25 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSi.onclick = () => { val.value='SI'; btnSi.classList.add('activo-si'); btnNo.classList.remove('activo-no'); sec.classList.remove('hidden'); };
     btnNo.onclick = () => { val.value='NO'; btnNo.classList.add('activo-no'); btnSi.classList.remove('activo-si'); sec.classList.add('hidden'); };
 
-    // Redefinición limpia de abrir modal respetando reset
-    b1.onclick = abrirModal;
-    if (b2) b2.onclick = abrirModal;
-    function abrirModal()  { resetRsvp(); modal.classList.add('abierto'); document.body.style.overflow = 'hidden'; }
+    // FUNCIÓN UNIFICADA para abrir modal (con reset)
+    function abrirModal() {
+        resetRsvp();
+        if (modal) modal.classList.add('abierto');
+        document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal() {
+        if (modal) modal.classList.remove('abierto');
+        document.body.style.overflow = 'auto';
+    }
 
-    /* LÓGICA DE ENVÍO CORREGIDA (No más bloqueos fantasma en SheetDB) */
+    // Usar SOLO addEventListener para evitar duplicación
+    if (b1) b1.addEventListener('click', abrirModal);
+    if (b2) b2.addEventListener('click', abrirModal);
+    if (cerrar) cerrar.addEventListener('click', cerrarModal);
+    if (back) back.addEventListener('click', cerrarModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+    /* LÓGICA DE ENVÍO */
     document.getElementById('rsvpForm').onsubmit = async (e) => {
         e.preventDefault();
         if (!val.value) return alert(copy[currentLang].selectAttendance);
@@ -277,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const filaExistente = Array.isArray(filas) ? filas.find(f => normalizarNombre(f.nombre) === nombreNormalizado) : null;
                     
                     if (filaExistente) {
-                        // Si se encuentra en Excel, bloqueamos localmente y salimos de inmediato
                         guardarRsvpRegistrado(payload.nombre, payload.asistencia);
                         mostrarRsvpBloqueado();
                         return;
@@ -285,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 2. SI NO EXISTE, ENVIAMOS LA PETICIÓN POST A SHEETDB (ESCRIBIR EN EL EXCEL)
+            // 2. SI NO EXISTE, ENVIAMOS LA PETICIÓN POST A SHEETDB
             const res = await fetch('https://sheetdb.io/api/v1/mtnhnv7jyyebe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -294,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!res.ok) throw new Error('Error de conexión con SheetDB');
 
-            // 3. SE GUARDA EL CANDADO LOCALMENTE SÓLO TRAS GUARDAR EN EL EXCEL EXITOSAMENTE
+            // 3. SE GUARDA EL CANDADO LOCALMENTE
             guardarRsvpRegistrado(payload.nombre, payload.asistencia);
 
             // 4. DESPLEGAR INTERFAZ DE ÉXITO
@@ -318,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+
     /* ── CARRUSEL ───────── */
     const track  = document.getElementById('carouselTrack');
     const dotsW  = document.getElementById('carouselDots');
@@ -332,22 +336,27 @@ document.addEventListener('DOMContentLoaded', () => {
             d.addEventListener('click', () => { goTo(i); resetAuto(); });
             dotsW.appendChild(d);
         });
+
         function goTo(i) {
             cur = ((i % slides.length) + slides.length) % slides.length;
             slides.forEach((slide, j) => slide.classList.toggle('active', j === cur));
             dotsW.querySelectorAll('.dot').forEach((d,j) => d.classList.toggle('activo', j === cur));
         }
-        document.getElementById('carouselPrev').onclick = () => { goTo(cur-1); resetAuto(); };
-        document.getElementById('carouselNext').onclick = () => { goTo(cur+1); resetAuto(); };
+
+        document.getElementById('carouselPrev').addEventListener('click', () => { goTo(cur-1); resetAuto(); });
+        document.getElementById('carouselNext').addEventListener('click', () => { goTo(cur+1); resetAuto(); });
+
         let tx = 0;
         track.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
         track.addEventListener('touchend',   e => { const dx = tx - e.changedTouches[0].clientX; if (Math.abs(dx) > 40) { goTo(dx > 0 ? cur+1 : cur-1); resetAuto(); } }, {passive:true});
+
         function startAuto() { auto = setInterval(() => goTo(cur+1), 4500); }
         function resetAuto() { clearInterval(auto); startAuto(); }
         startAuto();
     }
 
-    /* ── AUDIO / MÚSICA GLOBAL DE LA INVITACIÓN ── */
+
+    /* ── AUDIO / MÚSICA ── */
     const audio = document.getElementById('carouselAudio');
     const musicBtn = document.getElementById('musicToggle');
     const musicPlayer = document.querySelector('.music-player');
@@ -412,9 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.addEventListener('ended', updateMusicProgress);
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                stopMusic();
-            }
+            if (document.hidden) stopMusic();
         });
         window.addEventListener('pagehide', stopMusic);
         window.addEventListener('blur', () => {
