@@ -33,31 +33,74 @@ document.addEventListener('DOMContentLoaded', () => {
     const p = new URLSearchParams(window.location.search);
     const n = p.get('n'), ps = p.get('p');
 
-    function offerGermanTranslation() {
-        const alreadyAsked = localStorage.getItem('invitationGermanTranslationAsked');
-        if (alreadyAsked) return;
+    const copy = {
+        es: {
+            submit: 'Enviar Confirmación',
+            sending: 'ENVIANDO...',
+            selectAttendance: 'Selecciona tu asistencia',
+            minPasses: 'Ingresa al menos 1 pase.',
+            maxPasses: (max) => `Solo tienes ${max} pase${max === 1 ? '' : 's'} reservado${max === 1 ? '' : 's'}. No puedes confirmar más.`,
+            successTitleYes: '¡Pura Vida!',
+            successTitleNo: 'Respuesta recibida',
+            successSubYes: 'Confirmación guardada.<br>¡Nos vemos en octubre!',
+            successSubNo: 'Tu respuesta ha sido registrada.<br>¡Gracias por dejarnos saber!',
+            alreadyTitle: 'Confirmación ya registrada',
+            alreadySub: 'Esta invitación solo se puede confirmar una vez.<br>Si necesitas corregirla, contáctanos.',
+            musicPause: 'Pausar música',
+            musicPlay: 'Reproducir música',
+            errorSend: 'Error al enviar, intenta de nuevo.'
+        },
+        de: {
+            submit: 'Bestätigung senden',
+            sending: 'WIRD GESENDET...',
+            selectAttendance: 'Bitte wähle deine Teilnahme aus.',
+            minPasses: 'Bitte mindestens 1 Platz eingeben.',
+            maxPasses: (max) => `Du hast nur ${max} Platz${max === 1 ? '' : 'e'} reserviert. Mehr kannst du nicht bestätigen.`,
+            successTitleYes: 'Wir freuen uns!',
+            successTitleNo: 'Antwort erhalten',
+            successSubYes: 'Bestätigung gespeichert.<br>Wir sehen uns im Oktober!',
+            successSubNo: 'Deine Antwort wurde registriert.<br>Danke, dass du uns Bescheid gegeben hast!',
+            alreadyTitle: 'Bestätigung bereits erfasst',
+            alreadySub: 'Diese Einladung kann nur einmal bestätigt werden.<br>Wenn du etwas ändern musst, melde dich bei uns.',
+            musicPause: 'Musik pausieren',
+            musicPlay: 'Musik abspielen',
+            errorSend: 'Fehler beim Senden. Bitte erneut versuchen.'
+        }
+    };
 
-        fetch('https://ipapi.co/json/', { cache: 'no-store' })
-            .then(res => res.ok ? res.json() : Promise.reject())
-            .then(data => {
-                const countryCode = String(data.country_code || '').toUpperCase();
-                const browserLang = String(navigator.language || '').toLowerCase();
+    let currentLang = localStorage.getItem('invitationLanguage') || 'es';
 
-                if (countryCode === 'DE' || browserLang.startsWith('de')) {
-                    localStorage.setItem('invitationGermanTranslationAsked', '1');
-                    setTimeout(() => {
-                        const shouldTranslate = window.confirm('Parece que estás en Alemania. ¿Quieres traducir esta invitación al alemán?');
-                        if (shouldTranslate) {
-                            const targetUrl = encodeURIComponent(window.location.href);
-                            window.open(`https://translate.google.com/translate?sl=es&tl=de&u=${targetUrl}`, '_blank', 'noopener');
-                        }
-                    }, 900);
-                }
-            })
-            .catch(() => {});
+    function applyLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('invitationLanguage', lang);
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-i18n-es]').forEach(el => {
+            const text = lang === 'de' ? (el.dataset.i18nDe || el.dataset.i18nEs) : el.dataset.i18nEs;
+            if (el.classList.contains('btn-label')) {
+                el.textContent = text;
+            } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.value = text;
+            } else if (/<[a-z][\s\S]*>/i.test(text)) {
+                el.innerHTML = text;
+            } else {
+                el.textContent = text;
+            }
+        });
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+            btn.setAttribute('aria-pressed', btn.dataset.lang === lang ? 'true' : 'false');
+        });
+        if (document.getElementById('musicToggle')) {
+            const isPlaying = document.getElementById('musicToggle').classList.contains('playing');
+            document.getElementById('musicToggle').setAttribute('aria-label', isPlaying ? copy[lang].musicPause : copy[lang].musicPlay);
+        }
     }
 
-    offerGermanTranslation();
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+    });
+
+    applyLanguage(currentLang);
     if (n) {
         const nl = n.replace(/-/g,' ');
         document.getElementById('inputNombre').value = nl;
@@ -113,6 +156,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendBtn = document.getElementById('btnEnviar');
     const cant = document.getElementById('inputCantidad');
     const errCant = document.getElementById('errorCantidad');
+    const rsvpLockPrefix = 'rsvp-confirmado';
+
+    function normalizarNombre(nombre) {
+        return String(nombre || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function rsvpLockKey(nombre) {
+        const partes = [rsvpLockPrefix, normalizarNombre(nombre), String(n || ''), String(ps || '')].filter(Boolean);
+        return partes.join('|');
+    }
+
+    function rsvpYaRegistrado(nombre) {
+        return Boolean(localStorage.getItem(rsvpLockKey(nombre)));
+    }
+
+    function guardarRsvpRegistrado(nombre, asistencia) {
+        localStorage.setItem(rsvpLockKey(nombre), JSON.stringify({ asistencia, enviadoEn: new Date().toISOString() }));
+    }
+
+    function mostrarRsvpBloqueado() {
+        form.classList.add('hidden');
+        exito.classList.remove('hidden');
+        exitoTitle.innerText = copy[currentLang].alreadyTitle;
+        exitoSub.innerHTML = copy[currentLang].alreadySub;
+        sendBtn.disabled = true;
+    }
 
     function mostrarErrorCantidad(mensaje) {
         errCant.innerText = mensaje;
@@ -130,11 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const max = Number(cant.max) || 1;
         const cantidad = Number(cant.value);
         if (!Number.isFinite(cantidad) || cantidad < 1) {
-            mostrarErrorCantidad('Ingresa al menos 1 pase.');
+            mostrarErrorCantidad(copy[currentLang].minPasses);
             return false;
         }
         if (cantidad > max) {
-            mostrarErrorCantidad(`Solo tienes ${max} pase${max === 1 ? '' : 's'} reservado${max === 1 ? '' : 's'}. No puedes confirmar más.`);
+            mostrarErrorCantidad(copy[currentLang].maxPasses(max));
             return false;
         }
         ocultarErrorCantidad();
@@ -150,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetRsvp() {
         form.classList.remove('hidden');
         exito.classList.add('hidden');
-        sendBtn.innerText = 'Enviar Confirmación';
+        sendBtn.innerText = copy[currentLang].submit;
         sendBtn.disabled = false;
         val.value = '';
         btnSi.classList.remove('activo-si');
@@ -158,6 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
         sec.classList.add('hidden');
         exitoSub.style.display = '';
         ocultarErrorCantidad();
+
+        const nombreActual = document.getElementById('inputNombre').value;
+        if (nombreActual && rsvpYaRegistrado(nombreActual)) {
+            mostrarRsvpBloqueado();
+        }
     }
 
     btnSi.onclick = () => { val.value='SI'; btnSi.classList.add('activo-si'); btnNo.classList.remove('activo-no'); sec.classList.remove('hidden'); };
@@ -167,38 +241,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('rsvpForm').onsubmit = async (e) => {
         e.preventDefault();
-        if (!val.value) return alert('Selecciona tu asistencia');
+        if (!val.value) return alert(copy[currentLang].selectAttendance);
         if (val.value === 'SI' && !validarCantidad()) {
             return;
         }
-        sendBtn.innerText = 'ENVIANDO...'; sendBtn.disabled = true;
+
+        const nombre = String(document.getElementById('inputNombre').value || '').trim();
+        if (nombre && rsvpYaRegistrado(nombre)) {
+            mostrarRsvpBloqueado();
+            return;
+        }
+
+        sendBtn.innerText = copy[currentLang].sending; sendBtn.disabled = true;
         const formDataObj = Object.fromEntries(new FormData(e.target).entries());
         const payload = { ...formDataObj };
 
         async function enviarRespuesta() {
-            const nombre = String(payload.nombre || '').trim();
-            if (nombre) {
-                try {
-                    const searchRes = await fetch(`https://sheetdb.io/api/v1/mtnhnv7jyyebe/search?nombre=${encodeURIComponent(nombre)}`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
+            const nombreNormalizado = normalizarNombre(payload.nombre);
+            if (nombreNormalizado) {
+                const searchRes = await fetch(`https://sheetdb.io/api/v1/mtnhnv7jyyebe/search?nombre=${encodeURIComponent(payload.nombre)}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
 
-                    if (searchRes.ok) {
-                        const filas = await searchRes.json();
-                        const fila = Array.isArray(filas) ? filas.find(f => String(f.nombre || '').trim().toLowerCase() === nombre.toLowerCase()) : null;
-                        if (fila && (fila.id || fila._id)) {
-                            const rowId = fila.id || fila._id;
-                            const updateRes = await fetch(`https://sheetdb.io/api/v1/mtnhnv7jyyebe/id/${rowId}`, {
-                                method: 'PATCH',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ data: payload })
-                            });
-                            if (updateRes.ok) return updateRes;
-                        }
+                if (searchRes.ok) {
+                    const filas = await searchRes.json();
+                    const fila = Array.isArray(filas) ? filas.find(f => normalizarNombre(f.nombre) === nombreNormalizado) : null;
+                    if (fila) {
+                        const error = new Error('already-submitted');
+                        error.code = 'already-submitted';
+                        throw error;
                     }
-                } catch (err) {
-                    console.warn('No se pudo actualizar la fila existente, se intentará crear una nueva.', err);
                 }
             }
 
@@ -213,20 +286,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await enviarRespuesta();
             if (!res.ok) throw new Error();
 
+            guardarRsvpRegistrado(payload.nombre, payload.asistencia);
+
             // Mostrar mensaje de éxito dentro del modal y mantener la X para cerrar
             form.classList.add('hidden');
             exito.classList.remove('hidden');
             if (val.value === 'SI') {
-                exitoTitle.innerText = '¡Pura Vida!';
-                exitoSub.innerHTML = 'Confirmación guardada.<br>¡Nos vemos en octubre!'
-                    + (payload.nombres ? `<br><small>Nombres: ${escapeHTML(payload.nombres)}</small>` : '');
+                exitoTitle.innerText = copy[currentLang].successTitleYes;
+                const namesLabel = currentLang === 'de' ? 'Namen:' : 'Nombres:';
+                exitoSub.innerHTML = copy[currentLang].successSubYes
+                    + (payload.nombres ? `<br><small>${namesLabel} ${escapeHTML(payload.nombres)}</small>` : '');
             } else {
-                exitoTitle.innerText = 'Respuesta recibida';
-                exitoSub.innerHTML = 'Tu respuesta ha sido registrada.<br>¡Gracias por dejarnos saber!';
+                exitoTitle.innerText = copy[currentLang].successTitleNo;
+                exitoSub.innerHTML = copy[currentLang].successSubNo;
             }
-        } catch {
-            alert('Error al enviar, intenta de nuevo.');
-            sendBtn.innerText = 'Enviar Confirmación';
+        } catch (err) {
+            if (err && err.code === 'already-submitted') {
+                guardarRsvpRegistrado(payload.nombre, payload.asistencia);
+                mostrarRsvpBloqueado();
+                return;
+            }
+            alert(copy[currentLang].errorSend);
+            sendBtn.innerText = copy[currentLang].submit;
             sendBtn.disabled = false;
         }
     };
@@ -263,31 +344,48 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ── AUDIO / MÚSICA GLOBAL DE LA INVITACIÓN ── */
     const audio = document.getElementById('carouselAudio');
     const musicBtn = document.getElementById('musicToggle');
-    let userPausedManually = false;
+    const musicPlayer = document.querySelector('.music-player');
+    const musicProgress = document.getElementById('musicProgress');
 
     function updateMusicUI(isPlaying) {
         if (!musicBtn) return;
         musicBtn.classList.toggle('playing', !!isPlaying);
+        if (musicPlayer) musicPlayer.classList.toggle('playing', !!isPlaying);
         musicBtn.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
-        musicBtn.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
+        musicBtn.setAttribute('aria-label', isPlaying ? copy[currentLang].musicPause : copy[currentLang].musicPlay);
+        const btnText = musicBtn.querySelector('.music-btn-text');
+        const btnIcon = musicBtn.querySelector('.music-btn-icon');
+        if (btnText) btnText.textContent = isPlaying ? 'Pause' : 'Play';
+        if (btnIcon) btnIcon.textContent = isPlaying ? '❚❚' : '▶';
+    }
+
+    function updateMusicProgress() {
+        if (!musicProgress) return;
+        const duration = Number(audio.duration);
+        const current = Number(audio.currentTime);
+        if (!Number.isFinite(duration) || duration <= 0) {
+            musicProgress.style.width = '0%';
+            return;
+        }
+        const percent = Math.max(0, Math.min(100, (current / duration) * 100));
+        musicProgress.style.width = `${percent}%`;
+    }
+
+    function stopMusic() {
+        if (!audio || audio.paused) return;
+        audio.pause();
+        updateMusicUI(false);
+        updateMusicProgress();
     }
 
     if (musicBtn && audio) {
-        function startAudio() {
-            if (audio.paused && !userPausedManually) {
-                audio.play().then(() => updateMusicUI(true)).catch(() => {});
-            }
-        }
-
         musicBtn.addEventListener('click', async () => {
             try {
                 if (audio.paused) {
                     await audio.play();
-                    userPausedManually = false;
                     updateMusicUI(true);
                 } else {
                     audio.pause();
-                    userPausedManually = true;
                     updateMusicUI(false);
                 }
             } catch (err) {
@@ -295,8 +393,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        document.addEventListener('click', startAudio, { once: true, passive: true });
-        document.addEventListener('touchstart', startAudio, { once: true, passive: true });
+        audio.addEventListener('loadedmetadata', updateMusicProgress);
+        audio.addEventListener('timeupdate', updateMusicProgress);
+        audio.addEventListener('play', () => {
+            updateMusicUI(true);
+            updateMusicProgress();
+        });
+        audio.addEventListener('pause', () => {
+            updateMusicUI(false);
+            updateMusicProgress();
+        });
+        audio.addEventListener('ended', updateMusicProgress);
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopMusic();
+            }
+        });
+        window.addEventListener('pagehide', stopMusic);
+        window.addEventListener('blur', () => {
+            if (document.hidden) stopMusic();
+        });
+
+        updateMusicUI(false);
+        updateMusicProgress();
     }
 
     /* ── SCROLL REVEAL ──── */

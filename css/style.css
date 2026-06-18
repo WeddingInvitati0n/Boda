@@ -7,21 +7,60 @@
     --serif:'Cormorant Garamond',Georgia,serif;
     --sans:'Jost',sans-serif;
 }
-html{scroll-behavior:smooth}
-body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-x:hidden}
 
-/* ── SOBRE APERTURA (REAJUSTADO A PANTALLA COMPLETA) ─────────────── */
+--------------------------------------------------------------------------------------------------------------
+/* Asegura que el contenedor del sobre controle el botón absoluto */
 #pantalla-sobre {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Forzamos el color verde base desde el fondo para que jamás queden franjas crema abajo */
-  background: linear-gradient(135deg, #9ca98c 0%, #8a967b 100%); 
-  transition: opacity 1s ease, filter 1s ease;
+    position: relative;
+    /* Si tu sobre no tiene una altura definida en CSS, asegúrate de que tenga al menos min-height: 100vh; */
 }
+
+/* La cápsula contenedora (pequeña y elegante en la esquina) */
+#pantalla-sobre .lang-switch {
+    position: absolute;
+    top: 20px; /* Un poco más abajo para no chocar con el borde extremo */
+    left: 20px;
+    z-index: 140; /* Por encima de los marcos y el velo */
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    padding: 4px;
+    border: 1px solid rgba(200, 176, 122, 0.3); /* Un toque dorado sutil */
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(15, 20, 12, 0.08);
+}
+
+/* Los botones individuales dentro de la cápsula */
+#pantalla-sobre .lang-switch .lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--green-dk);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+/* El botón que está activo (Estilo óvalo marcado) */
+#pantalla-sobre .lang-switch .lang-btn.active {
+    background: var(--green-dk);
+    color: #f8f2e4;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto hover discreto para el botón inactivo */
+#pantalla-sobre .lang-switch .lang-btn:hover:not(.active) {
+    background: rgba(46, 80, 68, 0.08);
+}
+---------------------------------------------------------------------------------------------------------------------------------------
 
 #pantalla-sobre.desvanecer {
   opacity: 0;
@@ -290,20 +329,39 @@ body{background:var(--cream);font-family:var(--sans);color:var(--text);overflow-
 .dot.activo{background:var(--gold);transform:scale(1.1);box-shadow:0 0 0 2px rgba(200,176,122,.14)}
 
 /* Música: control de vinilo */
-.music-control{position:fixed;top:12px;right:12px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:8}
-.music-toggle{position:relative;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.98);border:1px solid rgba(200,176,122,.28);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 12px 22px rgba(15,20,12,.09);padding:0;overflow:hidden}
-.music-toggle:focus{outline:2px solid rgba(200,176,122,.28)}
-.vinyl-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;transition:transform .3s linear}
-.music-toggle.playing .vinyl-img{animation:spin 4s linear infinite}
-.vinyl-text{position:absolute;font-size:20px;color:#ffffff;font-weight:bold;z-index:2;text-shadow:0 2px 4px rgba(0,0,0,.3)}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.music-label{font-size:11px;color:var(--text-lt);letter-spacing:.08em;text-align:center;max-width:86px}
+.music-control{position:fixed;top:10px;right:10px;z-index:8;opacity:.78}
+.music-player{width:min(214px,calc(100vw - 20px));padding:8px 9px 7px;border-radius:16px;background:rgba(247,241,231,.72);border:1px solid rgba(200,176,122,.14);box-shadow:0 8px 14px rgba(15,20,12,.06),inset 0 1px 0 rgba(255,255,255,.28);backdrop-filter:blur(5px);display:flex;flex-direction:column;gap:7px;position:relative;overflow:hidden}
+.music-player::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(200,176,122,.05),transparent 42%),radial-gradient(circle at bottom right,rgba(74,115,96,.04),transparent 40%);pointer-events:none}
+.music-player-top{position:relative;display:grid;grid-template-columns:40px 1fr auto;gap:8px;align-items:center;z-index:1}
+.music-art{position:relative;width:40px;height:40px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(237,228,214,.78));border:1px solid rgba(200,176,122,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.24);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.music-art .vinyl-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:12px;transition:transform .45s linear;opacity:.7}
+.vinyl-text{position:absolute;font-size:14px;color:#ffffff;font-weight:700;z-index:2;text-shadow:0 2px 4px rgba(0,0,0,.22)}
+.music-meta{min-width:0;display:flex;flex-direction:column;gap:0}
+.music-kicker{font-size:7px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);opacity:.54;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music-title{font-family:var(--serif);font-size:12px;font-weight:600;font-style:italic;color:var(--green-dk);line-height:1.02;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.84}
+.music-subtitle{font-size:8px;color:var(--text-lt);letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.65}
+.music-toggle{min-width:50px;height:50px;border-radius:14px;border:1px solid rgba(200,176,122,.16);background:linear-gradient(180deg,rgba(46,80,68,.88),rgba(33,61,52,.88));color:#f8f2e4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;box-shadow:0 7px 12px rgba(15,20,12,.08),inset 0 1px 0 rgba(255,255,255,.08);padding:0 7px;transition:transform .2s ease,box-shadow .2s ease,background .25s ease,border-color .25s ease,opacity .25s ease;position:relative;overflow:hidden;opacity:.82}
+.music-toggle::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.14),transparent 48%);pointer-events:none}
+.music-toggle:hover{transform:translateY(-1px);box-shadow:0 10px 14px rgba(15,20,12,.1),inset 0 1px 0 rgba(255,255,255,.12);opacity:.95}
+.music-toggle:focus{outline:2px solid rgba(200,176,122,.24);outline-offset:2px}
+.music-btn-icon{font-size:13px;line-height:1;opacity:.95}
+.music-btn-text{font-size:7px;letter-spacing:.26em;text-transform:uppercase;margin-left:1px;opacity:.85}
+.music-player.playing .music-toggle{background:linear-gradient(180deg,rgba(200,176,122,.9),rgba(181,149,84,.9));color:#2f2716;border-color:rgba(200,176,122,.3)}
+.music-player.playing .music-btn-icon{transform:translateX(1px)}
+.music-progress-wrap{position:relative;height:5px;border-radius:999px;background:rgba(46,80,68,.08);overflow:hidden;z-index:1;opacity:.55}
+.music-progress{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold-lt),var(--gold),#e6c67e);box-shadow:0 0 6px rgba(200,176,122,.12);transition:width .15s linear}
 
 
 
 @media(max-width:480px){
-    .music-control{top:8px;right:8px}
-    .music-label{display:none}
+  .music-control{top:8px;right:8px;opacity:.72}
+  .music-player{width:min(206px,calc(100vw - 16px));padding:7px 8px 6px;border-radius:15px}
+  .music-player-top{grid-template-columns:36px 1fr auto;gap:7px}
+  .music-art{width:36px;height:36px;border-radius:11px}
+  .music-title{font-size:11px}
+  .music-subtitle{font-size:7px}
+  .music-toggle{min-width:46px;height:46px;border-radius:13px}
+  .music-btn-text{font-size:7px;letter-spacing:.2em}
 }
 
 /* ── VENUE ──────────────────────── */

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
     <title>Boda | Vanessa & Jonas</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/sobre-elegancia.css">
@@ -13,6 +14,12 @@
 
 <!-- ════════════════════════════════════ SOBRE DE APERTURA -->
 <div id="pantalla-sobre">
+
+    <div class="lang-switch" aria-label="Selector de idioma">
+        <button type="button" class="lang-btn active" data-lang="es">Español</button>
+        <button type="button" class="lang-btn" data-lang="de">Deutsch</button>
+    </div>
+
     <div class="sobre-marco">
         <div class="sobre-borde"></div>
 
@@ -33,7 +40,6 @@
         </div>
 
         <div id="sello-clic">
-            
             <div class="monograma-letras">
                 <span class="puerta-letra letra-izq">V</span>
                 <span class="puerta-letra letra-der">J</span>
@@ -44,12 +50,11 @@
                 <img src="img/sello.png" class="sello-img" alt="Sello">
             </div>
             
-            <p class="sello-texto">Tocar para abrir</p>
+            <p class="sello-texto" data-i18n-es="Tocar para abrir" data-i18n-de="Tippen, um zu öffnen">Tocar para abrir</p>
         </div>
 
     </div>
 </div>
-
 <!-- ════════════════════════════════════ MODAL SOBRE RSVP -->
 <div id="modal-rsvp" aria-modal="true" role="dialog" aria-label="Confirmar asistencia">
     <div class="modal-backdrop" id="modalBackdrop"></div>
@@ -79,48 +84,48 @@
                 <button class="modal-cerrar" id="modalCerrar" aria-label="Cerrar">✕</button>
 
                 <div class="carta-contenido">
-                    <p class="carta-eyebrow">14 · Octubre · 2026</p>
-                    <p class="carta-deadline"><strong>Hasta el 1 de septiembre</strong> para confirmar tu asistencia</p>
-                    <h3 class="carta-title">Confirmar <em>Asistencia</em></h3>
+                    <p class="carta-eyebrow" data-i18n-es="14 · Octubre · 2026" data-i18n-de="14 · Oktober · 2026">14 · Octubre · 2026</p>
+                    <p class="carta-deadline" data-i18n-es="<strong>Hasta el 1 de septiembre</strong> para confirmar tu asistencia" data-i18n-de="<strong>Bis zum 1. September</strong> zur Bestätigung deiner Teilnahme"><strong>Hasta el 1 de septiembre</strong> para confirmar tu asistencia</p>
+                    <h3 class="carta-title" data-i18n-es="Confirmar <em>Asistencia</em>" data-i18n-de="Teilnahme <em>bestätigen</em>">Confirmar <em>Asistencia</em></h3>
                     <div class="carta-divider"></div>
-                    <p id="mensajeBienvenida" class="carta-welcome">¡Hola! Qué alegría que estés aquí.</p>
+                    <p id="mensajeBienvenida" class="carta-welcome" data-i18n-es="¡Hola! Qué alegría que estés aquí." data-i18n-de="Hallo! Es ist schön, dass du hier bist.">¡Hola! Qué alegría que estés aquí.</p>
 
                     <form id="rsvpForm" class="rsvp-form">
                         <div class="rsvp-field">
-                            <label class="rsvp-label">Familia / Invitado</label>
+                            <label class="rsvp-label" data-i18n-es="Familia / Invitado" data-i18n-de="Familie / Gast">Familia / Invitado</label>
                             <input type="text" name="nombre" id="inputNombre" readonly class="rsvp-input rsvp-input-ro">
                         </div>
                         <div class="rsvp-btns">
-                            <button type="button" id="btnAsistir" class="rsvp-btn rsvp-btn-si"><span>✦</span> Sí, asistiré</button>
-                            <button type="button" id="btnNoAsistir" class="rsvp-btn rsvp-btn-no"><span>✕</span> No podré</button>
+                            <button type="button" id="btnAsistir" class="rsvp-btn rsvp-btn-si"><span>✦</span> <span class="btn-label" data-i18n-es="Sí, asistiré" data-i18n-de="Ja, ich komme">Sí, asistiré</span></button>
+                            <button type="button" id="btnNoAsistir" class="rsvp-btn rsvp-btn-no"><span>✕</span> <span class="btn-label" data-i18n-es="No podré" data-i18n-de="Ich kann nicht kommen">No podré</span></button>
                         </div>
                         <input type="hidden" name="asistencia" id="valorAsistencia" value="" required>
                         <div id="seccionInvitados" class="rsvp-extra hidden">
                             <div class="rsvp-field">
-                                <label class="rsvp-label">Pases Confirmados</label>
+                                <label class="rsvp-label" data-i18n-es="Pases Confirmados" data-i18n-de="Bestätigte Plätze">Pases Confirmados</label>
                                 <div class="pases-wrap">
                                     <input type="number" name="cantidad" id="inputCantidad" value="1" min="1" class="rsvp-input pases-input">
-                                    <span id="labelMax" class="pases-max">de 1 pase reservado</span>
+                                    <span id="labelMax" class="pases-max" data-i18n-es="de 1 pase reservado" data-i18n-de="von 1 reserviertem Platz">de 1 pase reservado</span>
                                 </div>
                                 <span id="errorCantidad" class="rsvp-error hidden" aria-live="polite"></span>
                             </div>
                             <div class="rsvp-field">
-                                <p class="rsvp-note">Confirmar el nombre de las personas que asistirán.</p>
-                                <label class="rsvp-label">Nombres completos</label>
+                                <p class="rsvp-note" data-i18n-es="Confirmar el nombre de las personas que asistirán." data-i18n-de="Bitte die Namen der Teilnehmenden bestätigen.">Confirmar el nombre de las personas que asistirán.</p>
+                                <label class="rsvp-label" data-i18n-es="Nombres completos" data-i18n-de="Vollständige Namen">Nombres completos</label>
                                 <textarea name="nombres" id="inputNombres" class="rsvp-input rsvp-textarea"></textarea>
                             </div>
                             <div class="rsvp-field">
-                                <label class="rsvp-label">Dieta / Restricciones</label>
-                                <textarea name="dieta" id="inputDieta" class="rsvp-input rsvp-textarea" placeholder="Ej. Vegetariana, sin gluten, etc."></textarea>
+                                <label class="rsvp-label" data-i18n-es="Dieta / Restricciones" data-i18n-de="Ernährung / Einschränkungen">Dieta / Restricciones</label>
+                                <textarea name="dieta" id="inputDieta" class="rsvp-input rsvp-textarea"></textarea>
                             </div>
                         </div>
-                        <button type="submit" id="btnEnviar" class="rsvp-submit">Enviar Confirmación</button>
+                        <button type="submit" id="btnEnviar" class="rsvp-submit" data-i18n-es="Enviar Confirmación" data-i18n-de="Bestätigung senden">Enviar Confirmación</button>
                     </form>
 
                     <div id="mensajeExito" class="rsvp-exito hidden">
                         <div class="exito-flower">✦</div>
-                        <p class="exito-text">¡Pura Vida!</p>
-                        <p class="exito-sub">Confirmación guardada.<br>¡Nos vemos en octubre!</p>
+                        <p class="exito-text" data-i18n-es="¡Pura Vida!" data-i18n-de="Wir freuen uns!">¡Pura Vida!</p>
+                        <p class="exito-sub" data-i18n-es="Confirmación guardada.<br>¡Nos vemos en octubre!" data-i18n-de="Bestätigung gespeichert.<br>Wir sehen uns im Oktober!">Confirmación guardada.<br>¡Nos vemos en octubre!</p>
                     </div>
                 </div>
             </div>
@@ -130,12 +135,27 @@
 
 <!-- ════════════════════════════════════ INVITACIÓN PRINCIPAL -->
 <div id="invitacion-main">
-    <audio id="carouselAudio" src="img/musica.mp3" loop preload="auto"></audio>
+    <audio id="carouselAudio" src="img/me fui de vacaciones.mp3" loop preload="auto"></audio>
     <div class="music-control global-music">
-        <button id="musicToggle" class="music-toggle" aria-pressed="false" aria-label="Pausar música">
-            <img src="img/vinilo.png" class="vinyl-img" alt="Vinilo">
-            <span class="vinyl-text">♫</span>
-        </button>
+        <div class="music-player" aria-label="Reproductor de música">
+            <div class="music-player-top">
+                <div class="music-art" aria-hidden="true">
+                    <img src="img/ima1.jpeg" class="vinyl-img" alt="Vinilo">
+                    <span class="vinyl-text">♫</span>
+                </div>
+                <div class="music-meta">
+                    <strong class="music-title">Vanessa & Jonas</strong>
+                    <span class="music-subtitle" data-i18n-es="Toca play para escuchar" data-i18n-de="Tippe auf Play, um zu hören">Toca play para escuchar</span>
+                </div>
+                <button id="musicToggle" class="music-toggle" aria-pressed="false" aria-label="Reproducir música">
+                    <span class="music-btn-icon">▶</span>
+                    <span class="music-btn-text" data-i18n-es="Play" data-i18n-de="Play">Play</span>
+                </button>
+            </div>
+            <div class="music-progress-wrap" aria-hidden="true">
+                <div id="musicProgress" class="music-progress"></div>
+            </div>
+        </div>
     </div>
 
     <!-- HERO -->
@@ -154,10 +174,10 @@
              ║  Si la imagen no carga, se muestra la rama SVG de respaldo║
              ╚══════════════════════════════════════════════════════════╝DEL PRINCIO FOTOS  --> 
         <div class="hero-corners" aria-hidden="true">
-            <img src="img/Flores_lavanda.png" class="hero-corner hc-tl branch" alt="" onerror="this.style.display='none'">
-            <img src="img/Flores_lavanda.png" class="hero-corner hc-tr branch" alt="" onerror="this.style.display='none'">
-            <img src="img/Flores_lavanda.png" class="hero-corner hc-bl branch" alt="" onerror="this.style.display='none'">
-            <img src="img/Flores_lavanda.png" class="hero-corner hc-br branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda." class="hero-corner hc-tl branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda." class="hero-corner hc-tr branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda." class="hero-corner hc-bl branch" alt="" onerror="this.style.display='none'">
+            <img src="img/Flores_lavanda." class="hero-corner hc-br branch" alt="" onerror="this.style.display='none'">
         </div>
 
         <!-- Pétalos flotantes -->
@@ -169,9 +189,9 @@
         </div>
 
         <div class="hero-content">
-            <p class="hero-eyebrow">¡Nos Casamos!</p>
+            <p class="hero-eyebrow" data-i18n-es="¡Nos Casamos!" data-i18n-de="Wir heiraten!">¡Nos Casamos!</p>
             <div class="hero-divider-top"></div>
-            <h1 class="hero-title">Vanessa <span class="ampersand">&</span> Jonas</h1>
+            <h1 class="hero-title" data-i18n-es="Vanessa <span class='ampersand'>&</span> Jonas" data-i18n-de="Vanessa <span class='ampersand'>&</span> Jonas">Vanessa <span class="ampersand">&</span> Jonas</h1>
         </div>
 
         <div class="scroll-hint"><div class="scroll-chevron"></div></div>
@@ -186,15 +206,15 @@
             <div class="petal p7"></div><div class="petal p8"></div>
         </div>
         <div class="countdown-bg-pattern" aria-hidden="true"></div>
-        <p class="countdown-label">Solo faltan...</p>
+        <p class="countdown-label" data-i18n-es="Solo faltan..." data-i18n-de="Es fehlen noch...">Solo faltan...</p>
         <div class="countdown-grid">
-            <div class="cd-unit"><span id="days" class="cd-num">00</span><span class="cd-word">Días</span></div>
+            <div class="cd-unit"><span id="days" class="cd-num">00</span><span class="cd-word" data-i18n-es="Días" data-i18n-de="Tage">Días</span></div>
             <div class="cd-dot">·</div>
-            <div class="cd-unit"><span id="hours" class="cd-num">00</span><span class="cd-word">Horas</span></div>
+            <div class="cd-unit"><span id="hours" class="cd-num">00</span><span class="cd-word" data-i18n-es="Horas" data-i18n-de="Stunden">Horas</span></div>
             <div class="cd-dot">·</div>
-            <div class="cd-unit"><span id="minutes" class="cd-num">00</span><span class="cd-word">Min</span></div>
+            <div class="cd-unit"><span id="minutes" class="cd-num">00</span><span class="cd-word" data-i18n-es="Min" data-i18n-de="Min">Min</span></div>
             <div class="cd-dot">·</div>
-            <div class="cd-unit"><span id="seconds" class="cd-num">00</span><span class="cd-word">Seg</span></div>
+            <div class="cd-unit"><span id="seconds" class="cd-num">00</span><span class="cd-word" data-i18n-es="Seg" data-i18n-de="Sek">Seg</span></div>
         </div>
     </section>
 
@@ -207,7 +227,7 @@
             <div class="petal p7"></div><div class="petal p8"></div>
         </div>
         <div class="quote-ornament" aria-hidden="true">✦</div>
-        <blockquote class="quote-text">"El amor no se mira, el amor se hace —<br>y juntos, lo haremos para siempre."</blockquote>
+        <blockquote class="quote-text" data-i18n-es="“El amor no se mira, el amor se hace —<br>y juntos, lo haremos para siempre.”" data-i18n-de="„Liebe sieht man nicht, Liebe lebt man —<br>und gemeinsam werden wir sie für immer tragen.“">"El amor no se mira, el amor se hace —<br>y juntos, lo haremos para siempre."</blockquote>
         <div class="quote-line"></div>
     </section>
 
@@ -222,8 +242,8 @@
         <div class="section-ornament" aria-hidden="true">
             <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.9"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
         </div>
-        <h2 class="section-title">Nosotros</h2>
-        <p class="section-sub">Un vistazo de nuestro de nuestra historia</p>
+        <h2 class="section-title" data-i18n-es="Nosotros" data-i18n-de="Wir">Nosotros</h2>
+        <p class="section-sub" data-i18n-es="Un vistazo de nuestra historia" data-i18n-de="Ein Blick auf unsere Geschichte">Un vistazo de nuestro de nuestra historia</p>
 
         <!-- ╔══════════════════════════════════════════════════════════╗
              ║  CARRUSEL DE FOTOS — agrega tantas como quieras          ║
@@ -284,11 +304,11 @@
                 <div class="section-ornament" style="justify-content:flex-start;margin-bottom:12px">
                     <svg viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg" width="170"><line x1="0" y1="20" x2="72" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="86" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><circle cx="100" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.9"/><circle cx="114" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1" opacity="0.8"/><line x1="128" y1="20" x2="200" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
                 </div>
-                <h2 class="section-title venue-title">El Lugar</h2>
+                <h2 class="section-title venue-title" data-i18n-es="El Lugar" data-i18n-de="Der Ort">El Lugar</h2>
                 <p class="venue-name">Jardin Else Kientzler</p>
-                <p class="venue-address">Costa Rica · 14 Oct 2026</p>
-                <p class="venue-desc">Un espacio verde rodeado de naturaleza tropical — el escenario perfecto para celebrar nuestro amor bajo el cielo costarricense.</p>
-                <a class="venue-map-btn" href="https://maps.google.com/?q=Jardin+Else+Kientzler+Costa+Rica" target="_blank" rel="noopener">Ver en Google Maps ↗</a>
+                <p class="venue-address" data-i18n-es="Costa Rica · 14 Oct 2026" data-i18n-de="Costa Rica · 14. Okt. 2026">Costa Rica · 14 Oct 2026</p>
+                <p class="venue-desc" data-i18n-es="Un espacio verde rodeado de naturaleza tropical — el escenario perfecto para celebrar nuestro amor bajo el cielo costarricense." data-i18n-de="Ein grüner Ort inmitten tropischer Natur — der perfekte Rahmen, um unsere Liebe unter dem costa-ricanischen Himmel zu feiern.">Un espacio verde rodeado de naturaleza tropical — el escenario perfecto para celebrar nuestro amor bajo el cielo costarricense.</p>
+                <a class="venue-map-btn" href="https://maps.google.com/?q=Jardin+Else+Kientzler+Costa+Rica" target="_blank" rel="noopener" data-i18n-es="Ver en Google Maps ↗" data-i18n-de="In Google Maps ansehen ↗">Ver en Google Maps ↗</a>
             </div>
 
             <!-- ╔════════════════════════════════════════════════════╗
@@ -315,7 +335,7 @@
         <div class="section-ornament" aria-hidden="true">
             <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
         </div>
-        <h2 class="section-title">Itinerario</h2>
+        <h2 class="section-title" data-i18n-es="Itinerario" data-i18n-de="Ablauf">Itinerario</h2>
         <div class="section-ornament" aria-hidden="true">
             <svg viewBox="0 0 300 40" xmlns="http://www.w3.org/2000/svg" width="240"><line x1="0" y1="20" x2="115" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/><circle cx="130" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="150" cy="20" r="6" fill="none" stroke="#c8b07a" stroke-width="1"/><circle cx="170" cy="20" r="4" fill="none" stroke="#c8b07a" stroke-width="1"/><line x1="185" y1="20" x2="300" y2="20" stroke="#c8b07a" stroke-width="0.8" opacity="0.7"/></svg>
         </div>
@@ -323,50 +343,50 @@
             <div class="tl-item reveal">
                 <div class="tl-time">03:30 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Ingreso de invitados</h4>
-                    <p class="tl-sub">Bienvenidos a nuestro día especial</p></div>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Ingreso de invitados" data-i18n-de="Ankunft der Gäste">Ingreso de invitados</h4>
+                    <p class="tl-sub" data-i18n-es="Bienvenidos a nuestro día especial" data-i18n-de="Willkommen zu unserem besonderen Tag">Bienvenidos a nuestro día especial</p></div>
             </div>
             <div class="tl-item reveal">
                 <div class="tl-time">04:00 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Inicio de la Ceremonia</h4>
-                    <p class="tl-sub">El momenro del "Si, acepto"</p></div>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Inicio de la Ceremonia" data-i18n-de="Beginn der Zeremonie">Inicio de la Ceremonia</h4>
+                    <p class="tl-sub" data-i18n-es="El momento del “Sí, acepto”" data-i18n-de="Der Moment des „Ja, ich will“">El momenro del "Si, acepto"</p></div>
             </div>
             <div class="tl-item reveal">
                 <div class="tl-time">05:00 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Recepción y Cóctel</h4>
-                    <p class="tl-sub">Ingreso de los invitados a recepcion</p>
-                    <p class="tl-sub">Frutas, Dips, Empanas y café</p></div>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Recepción y Cóctel" data-i18n-de="Empfang und Cocktail">Recepción y Cóctel</h4>
+                    <p class="tl-sub" data-i18n-es="Ingreso de los invitados a recepción" data-i18n-de="Ankunft der Gäste zum Empfang">Ingreso de los invitados a recepcion</p>
+                    <p class="tl-sub" data-i18n-es="Frutas, dips, empanadas y café" data-i18n-de="Früchte, Dips, Empanadas und Kaffee">Frutas, Dips, Empanas y café</p></div>
             </div>
             <div class="tl-item reveal">
                 <div class="tl-time">05:35 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Entrada de los Novios</h4>
-                    <p class="tl-sub">Brindis y cancion especial</p>
-                    <p class="tl-sub">Baile de los esposos</p>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Entrada de los Novios" data-i18n-de="Einzug der Brautleute">Entrada de los Novios</h4>
+                    <p class="tl-sub" data-i18n-es="Brindis y canción especial" data-i18n-de="Toast und ein besonderes Lied">Brindis y cancion especial</p>
+                    <p class="tl-sub" data-i18n-es="Baile de los esposos" data-i18n-de="Tanz der Eheleute">Baile de los esposos</p>
                 </div>
             </div>
             <div class="tl-item reveal">
                 <div class="tl-time">06:00 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Cena</h4>
-                    <p class="tl-sub">Banquete servido a la mesa y bocas</p></div>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Cena" data-i18n-de="Abendessen">Cena</h4>
+                    <p class="tl-sub" data-i18n-es="Banquete servido a la mesa" data-i18n-de="Serviertes Abendessen an den Tischen">Banquete servido a la mesa y bocas</p></div>
             </div>
             <div class="tl-item reveal">
                 <div class="tl-time">06:45 PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Actividades</h4>
-                    <p class="tl-sub">Photobooth ( 2 horas disponible)</p>
-                    <p class="tl-sub">Actividad de la liga y bouquet</p>
-                    <p class="tl-sub">Apertura de la mesa de dulces 8:00 PM</p>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Actividades" data-i18n-de="Aktivitäten">Actividades</h4>
+                    <p class="tl-sub" data-i18n-es="Photobooth (2 horas disponible)" data-i18n-de="Fotobox (2 Stunden verfügbar)">Photobooth ( 2 horas disponible)</p>
+                    <p class="tl-sub" data-i18n-es="Actividad de la liga y bouquet" data-i18n-de="Lotto- und Blumenspiel">Actividad de la liga y bouquet</p>
+                    <p class="tl-sub" data-i18n-es="Apertura de la mesa de dulces a las 8:00 PM" data-i18n-de="Süßigkeitenbuffet öffnet um 20:00 Uhr">Apertura de la mesa de dulces 8:00 PM</p>
                 </div>
             </div>
             <div class="tl-item reveal">
                 <div class="tl-time">09:30PM</div>
                 <div class="tl-dot-wrap"><div class="tl-line-top"></div><div class="tl-dot"></div><div class="tl-line-bot"></div></div>
-                <div class="tl-card"><h4 class="tl-title">Cierre del evento</h4>
-                    <p class="tl-sub">Gracias por acompañarnos</p></div>
+                <div class="tl-card"><h4 class="tl-title" data-i18n-es="Cierre del evento" data-i18n-de="Abschluss der Feier">Cierre del evento</h4>
+                    <p class="tl-sub" data-i18n-es="Gracias por acompañarnos" data-i18n-de="Danke, dass du mit uns feierst">Gracias por acompañarnos</p></div>
             </div>
             
 
@@ -375,8 +395,8 @@
 
     <!-- RSVP BANNER FINAL -->
     <div class="rsvp-cta-banner reveal">
-        <p class="rsvp-cta-text">¿Ya confirmaste tu lugar?</p>
-        <button class="rsvp-cta-btn" id="btnAbrirModal2">Confirmar Asistencia ✦</button>
+        <p class="rsvp-cta-text" data-i18n-es="¿Ya confirmaste tu lugar?" data-i18n-de="Hast du deinen Platz schon bestätigt?">¿Ya confirmaste tu lugar?</p>
+        <button class="rsvp-cta-btn" id="btnAbrirModal2" data-i18n-es="Confirmar Asistencia ✦" data-i18n-de="Teilnahme bestätigen ✦">Confirmar Asistencia ✦</button>
     </div>
 
     <!-- PANTALLA DE CONFIRMACIÓN FINAL -->
@@ -391,9 +411,9 @@
             <div class="confirmacion-inner">
                 <div class="confirmacion-flor">✦</div>
                 <h2 class="confirmacion-title">¡Pura Vida!</h2>
-                <p class="confirmacion-message" id="confirmacionMessage">Confirmación guardada.<br>¡Nos vemos en octubre!</p>
+                <p class="confirmacion-message" id="confirmacionMessage" data-i18n-es="Confirmación guardada.<br>¡Nos vemos en octubre!" data-i18n-de="Bestätigung gespeichert.<br>Wir sehen uns im Oktober!">Confirmación guardada.<br>¡Nos vemos en octubre!</p>
                 <p class="confirmacion-detail" id="confirmacionDetail"></p>
-                <button class="confirmacion-btn" id="btnVolverInicio">Volver al inicio</button>
+                <button class="confirmacion-btn" id="btnVolverInicio" data-i18n-es="Volver al inicio" data-i18n-de="Zurück zum Anfang">Volver al inicio</button>
             </div>
         </div>
     </div>
@@ -401,8 +421,8 @@
     <!-- FOOTER -->
     <footer class="site-footer">
         <p class="footer-names">V & J</p>
-        <p class="footer-date">14 · 10 · 2026</p>
-        <p class="footer-loc">Jardin Else Kientzler · Costa Rica</p>
+        <p class="footer-date" data-i18n-es="14 · 10 · 2026" data-i18n-de="14 · 10 · 2026">14 · 10 · 2026</p>
+        <p class="footer-loc" data-i18n-es="Jardin Else Kientzler · Costa Rica" data-i18n-de="Jardin Else Kientzler · Costa Rica">Jardin Else Kientzler · Costa Rica</p>
     </footer>
 </div>
 
