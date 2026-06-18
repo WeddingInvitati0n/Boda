@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             maxPasses: (max) => `Du hast nur ${max} Platz${max === 1 ? '' : 'e'} reserviert. Mehr kannst du nicht bestätigen.`,
             successTitleYes: 'Wir freuen uns!',
             successTitleNo: 'Antwort erhalten',
-            successSubYes: 'Bestätigung gespeichert.<br>Wir sehen uns im Oktober!',
+            successSubYes: 'Bestätigung gespeichert.<br>Wir sehen uns im  Oktober!',
             successSubNo: 'Deine Antwort wurde registriert.<br>Danke, dass du uns Bescheid gegeben hast!',
             alreadyTitle: 'Bestätigung bereits erfasst',
             alreadySub: 'Diese Einladung kann nur einmal bestätigt werden.<br>Wenn du etwas ändern musst, melde dich bei uns.',
@@ -162,8 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return String(nombre || '').trim().toLowerCase().replace(/\s+/g, ' ');
     }
 
+    // Cambiado para simplificar y asegurar consistencia
     function rsvpLockKey(nombre) {
-        const partes = [rsvpLockPrefix, normalizarNombre(nombre), String(n || ''), String(ps || '')].filter(Boolean);
+        const partes = [rsvpLockPrefix, normalizarNombre(nombre)].filter(Boolean);
         return partes.join('|');
     }
 
@@ -206,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarErrorCantidad(copy[currentLang].maxPasses(max));
             return false;
         }
-        ocultarErrorCantidad();
+        box = ocultarErrorCantidad();
         return true;
     }
 
@@ -237,8 +238,12 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSi.onclick = () => { val.value='SI'; btnSi.classList.add('activo-si'); btnNo.classList.remove('activo-no'); sec.classList.remove('hidden'); };
     btnNo.onclick = () => { val.value='NO'; btnNo.classList.add('activo-no'); btnSi.classList.remove('activo-si'); sec.classList.add('hidden'); };
 
+    // Redefinición limpia de abrir modal respetando reset
+    b1.onclick = abrirModal;
+    if (b2) b2.onclick = abrirModal;
     function abrirModal()  { resetRsvp(); modal.classList.add('abierto'); document.body.style.overflow = 'hidden'; }
 
+    /* LÓGICA DE ENVÍO CORREGIDA (No más bloqueos fantasma en SheetDB) */
     document.getElementById('rsvpForm').onsubmit = async (e) => {
         e.preventDefault();
         if (!val.value) return alert(copy[currentLang].selectAttendance);
@@ -252,12 +257,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        sendBtn.innerText = copy[currentLang].sending; sendBtn.disabled = true;
+        sendBtn.innerText = copy[currentLang].sending; 
+        sendBtn.disabled = true;
+
         const formDataObj = Object.fromEntries(new FormData(e.target).entries());
         const payload = { ...formDataObj };
+        const nombreNormalizado = normalizarNombre(payload.nombre);
 
-        async function enviarRespuesta() {
-            const nombreNormalizado = normalizarNombre(payload.nombre);
+        try {
+            // 1. BUSCAR EN SHEETDB SI YA EXISTE EL NOMBRE
             if (nombreNormalizado) {
                 const searchRes = await fetch(`https://sheetdb.io/api/v1/mtnhnv7jyyebe/search?nombre=${encodeURIComponent(payload.nombre)}`, {
                     method: 'GET',
@@ -266,29 +274,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (searchRes.ok) {
                     const filas = await searchRes.json();
-                    const fila = Array.isArray(filas) ? filas.find(f => normalizarNombre(f.nombre) === nombreNormalizado) : null;
-                    if (fila) {
-                        const error = new Error('already-submitted');
-                        error.code = 'already-submitted';
-                        throw error;
+                    const filaExistente = Array.isArray(filas) ? filas.find(f => normalizarNombre(f.nombre) === nombreNormalizado) : null;
+                    
+                    if (filaExistente) {
+                        // Si se encuentra en Excel, bloqueamos localmente y salimos de inmediato
+                        guardarRsvpRegistrado(payload.nombre, payload.asistencia);
+                        mostrarRsvpBloqueado();
+                        return;
                     }
                 }
             }
 
-            return fetch('https://sheetdb.io/api/v1/mtnhnv7jyyebe', {
+            // 2. SI NO EXISTE, ENVIAMOS LA PETICIÓN POST A SHEETDB (ESCRIBIR EN EL EXCEL)
+            const res = await fetch('https://sheetdb.io/api/v1/mtnhnv7jyyebe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ data: [payload] })
             });
-        }
 
-        try {
-            const res = await enviarRespuesta();
-            if (!res.ok) throw new Error();
+            if (!res.ok) throw new Error('Error de conexión con SheetDB');
 
+            // 3. SE GUARDA EL CANDADO LOCALMENTE SÓLO TRAS GUARDAR EN EL EXCEL EXITOSAMENTE
             guardarRsvpRegistrado(payload.nombre, payload.asistencia);
 
-            // Mostrar mensaje de éxito dentro del modal y mantener la X para cerrar
+            // 4. DESPLEGAR INTERFAZ DE ÉXITO
             form.classList.add('hidden');
             exito.classList.remove('hidden');
             if (val.value === 'SI') {
@@ -300,12 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 exitoTitle.innerText = copy[currentLang].successTitleNo;
                 exitoSub.innerHTML = copy[currentLang].successSubNo;
             }
+
         } catch (err) {
-            if (err && err.code === 'already-submitted') {
-                guardarRsvpRegistrado(payload.nombre, payload.asistencia);
-                mostrarRsvpBloqueado();
-                return;
-            }
+            console.error(err);
             alert(copy[currentLang].errorSend);
             sendBtn.innerText = copy[currentLang].submit;
             sendBtn.disabled = false;
