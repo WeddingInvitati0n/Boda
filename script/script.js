@@ -12,21 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
         sello.classList.add('desaparecer');
         pIzq.classList.add('abrir-izq');
         pDer.classList.add('abrir-der');
+        pSobre.classList.add('desvanecer');
+        inv.classList.add('aparecer');
+        // Animar esquinas del hero en secuencia
         setTimeout(() => {
-            pSobre.classList.add('desvanecer');
-            inv.classList.add('aparecer');
-            // Animar esquinas del hero en secuencia
-            setTimeout(() => {
-                document.querySelectorAll('.branch').forEach((el, i) => {
-                    setTimeout(() => el.classList.add('visible'), i * 280);
-                });
-            }, 200);
-            setTimeout(() => {
-                pSobre.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                initScrollReveal();
-            }, 1200);
-        }, 860);
+            document.querySelectorAll('.branch').forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 280);
+            });
+        }, 200);
+        setTimeout(() => {
+            pSobre.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            initScrollReveal();
+        }, 1200);
     });
 
     /* ── URL PARAMS ────── */

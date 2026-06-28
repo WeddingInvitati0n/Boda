@@ -14,12 +14,12 @@ body, html {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #8a967b; /* Evita destellos o bordes de otro color abajo */
+  background-color: #f5f0e6; /* Fondo crema elegante */
 }
 
 #pantalla-sobre {
-  /* Ahora el contenedor principal es el sobre verde que cubre TODA la pantalla */
-  background: linear-gradient(135deg, #9ca98c 0%, #8a967b 100%);
+  /* Contenedor principal con fondo crema elegante */
+  background: linear-gradient(135deg, #f5f0e6 0%, #ebe5d8 100%);
   width: 100%;
   height: 100vh;
   position: relative;
@@ -29,20 +29,7 @@ body, html {
   perspective: 1000px; /* Mantiene la profundidad para tu animación 3D */
 }
 
-.sobre-marco {
-  /* Al ser pantalla completa, el marco se fusiona con el fondo, pero mantenemos */
-  /* tu hermosa animación de entrada que escala y rota sutilmente la pantalla */
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  inset: 0;
-  animation: aparecerSobreElegante 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-  /* Un sutil texturizado o brillo sobre el verde original */
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.05) 100%);
-}
+
 
 @keyframes aparecerSobreElegante {
   0% {
@@ -56,17 +43,6 @@ body, html {
     opacity: 1;
     transform: scale(1) rotateX(0) rotateZ(0);
   }
-}
-
-.sobre-borde {
-  /* Modificado a porcentaje (4%) para que el borde dorado dibuje */
-  /* una ventana perfecta sin importar si es monitor o celular */
-  position: absolute;
-  border: 1px solid rgba(230, 215, 180, 0.4); 
-  inset: 4%;
-  border-radius: 2px;
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.05);
-  pointer-events: none;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -96,18 +72,16 @@ body, html {
 .flor-bottom-left {
   bottom: 4%;
   left: 4%;
-  transform: scaleY(-1); /* Espejo vertical si usas la misma imagen */
 }
 
 .flor-bottom-right {
   bottom: 4%;
   right: 4%;
-  transform: scale(-1); /* Espejo completo si usas la misma imagen */
 }
 
 #sello-clic {
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   /* Usamos translate estricto para anclar el bloque al centro de la pantalla */
   transform: translate(-50%, -50%);
@@ -123,7 +97,7 @@ body, html {
 
 /* Efecto levitación armónico que mueve todo el conjunto junto */
 #sello-clic:hover {
-  transform: translate(-50%, -52%);
+  transform: translate(-50%, -55%);
 }
 
 .puerta-letra {
@@ -145,44 +119,8 @@ body, html {
   align-items: center;
   justify-content: center;
   /* CAMBIO: Sello más grande y dominante en la composición */
-  width: clamp(140px, 25vw, 185px); 
+  width: clamp(140px, 1000vw, 185px); 
   height: clamp(140px, 25vw, 185px);
-}
-
-/* --- EL PULSO ENRAIZADO MATEMÁTICAMENTE --- */
-.sello-ring {
-  position: absolute;
-  top: 70%;
-  left: 50%;
-  /* Nace forzosamente desde el centro de la imagen */
-  transform: translate(-50%, -50%) scale(1);
-  width: 40%;  /* Ajustado al contorno inicial de la cera */
-  height: 40%;
-  border: 2px solid rgba(230, 215, 180, 0.45);
-  border-radius: 50%;
-  z-index: 1; /* Pasa por detrás del relieve metálico */
-  pointer-events: none;
-  box-shadow: 0 0 15px rgba(230, 215, 180, 0.1);
-  animation: pulsoMatematicoPerfecto 2.8s ease-in-out infinite;
-}
-
-@keyframes pulsoMatematicoPerfecto {
-  0% {
-    transform: translate(-50%, -25%) scale(1);
-    opacity: 0.8;
-    box-shadow: 0 0 0 0 rgba(230, 215, 180, 0.4);
-  }
-  50% {
-    opacity: 0.25;
-    /* La onda se expande limpia un 35% hacia afuera de los bordes del sello */
-    transform: translate(-50%, -25%) scale(1.35); 
-    box-shadow: 0 0 20px 6px rgba(230, 215, 180, 0.25);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.55);
-    opacity: 0;
-    box-shadow: 0 0 20px 20px rgba(230, 215, 180, 0);
-  }
 }
 
 /* --- LA IMAGEN DEL SELLO DE LACRE --- */
@@ -192,13 +130,19 @@ body, html {
   height: 100%;
   object-fit: contain;
   z-index: 2; /* Cubre el punto de origen de la animación del pulso */
-  filter: drop-shadow(0 10px 24px rgba(40, 48, 32, 0.38)) 
+  filter: drop-shadow(0 20px 24px rgba(40, 48, 32, 0.38)) 
           drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
   transition: transform 0.4s ease;
+  animation: palpitar 2s ease-in-out infinite;
+}
+
+@keyframes palpitar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
 }
 
 #sello-clic:hover .sello-img {
-  transform: scale(1.05) rotate(2deg); /* Reacción elegante táctil */
+  transform: scale(1.12) rotate(2deg); /* Reacción elegante táctil */
 }
 
 /* --- TEXTO DE GUÍA INFERIOR (TOCAR PARA ABRIR) --- */
@@ -207,7 +151,7 @@ body, html {
   font-weight: 400;
   letter-spacing: 0.55em; /* Estilo tipográfico de papelería editorial */
   text-transform: uppercase;
-  color: rgba(245, 235, 200, 0.65); /* Crema suave para romper el contraste duro */
+  color: rgba(15, 15, 14, 0.65); /* Crema suave para romper el contraste duro */
   animation: parpadeoElegante 2.5s ease-in-out infinite;
   white-space: nowrap;
   position: relative;
