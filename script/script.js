@@ -276,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (searchRes.ok) {
                     const filas = await searchRes.json();
-                    const filaExistente = Array.isArray(filas) ? filas.find(f => normalizarNombre(f.nombre) === nombreNormalizado) : null;
+                    // CORREGIDO: Solo bloquea si el invitado ya respondió de verdad con un SI o un NO
+                    const filaExistente = Array.isArray(filas) ? filas.find(f => normalizarNombre(f.nombre) === nombreNormalizado && (f.asistencia === 'SI' || f.asistencia === 'NO')) : null;
                     
                     if (filaExistente) {
                         guardarRsvpRegistrado(payload.nombre, payload.asistencia);
