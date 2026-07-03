@@ -426,6 +426,20 @@
 .footer-names{font-family:var(--serif);font-size:36px;font-style:italic;font-weight:300;color:var(--gold-lt);margin-bottom:10px}
 .footer-date,.footer-loc{font-size:11px;font-weight:300;letter-spacing:.42em;text-transform:uppercase;color:rgba(200,176,122,.42);margin-top:6px}
 
+/* ── REGALOS ────────────────────── */
+.gifts-section{background:var(--cream);padding:80px 24px;text-align:center;position:relative;overflow:hidden}
+.gifts-content{max-width:640px;margin:0 auto;position:relative;z-index:2}
+.gifts-icon{font-size:64px;margin-bottom:24px;display:block;animation:floatFlor 3s ease-in-out infinite}
+.gifts-icon svg{width:60px;height:60px;stroke:var(--gold)}
+.gifts-message{font-family:var(--serif);font-size:clamp(16px,3vw,20px);font-weight:300;font-style:italic;color:var(--green-dk);line-height:1.7;margin-bottom:32px;text-shadow:0 1px 4px rgba(0,0,0,.04)}
+.gifts-image-container{position:relative;display:inline-block;max-width:100%;margin:0 auto 32px;padding:16px;background:rgba(255,255,255,.85);border:1px solid rgba(200,176,122,.3);border-radius:4px;box-shadow:0 12px 32px rgba(23,30,20,.1)}
+.gifts-image{display:block;max-width:100%;height:auto;max-height:400px;object-fit:contain;margin:0 auto;border-radius:2px}
+.gifts-image-frame{position:absolute;inset:8px;border:1px solid rgba(200,176,122,.2);border-radius:2px;pointer-events:none}
+.gifts-ph{background:rgba(245,239,229,.5);min-height:200px;display:flex;align-items:center;justify-content:center}
+.gifts-ph .gifts-image{display:none}
+.gifts-ph::after{content:'Tu imagen de regalos · img/regalo.jpg';display:block;font-size:13px;color:var(--text-lt);font-style:italic;text-align:center;padding:20px}
+.gifts-highlight{font-family:var(--serif);font-size:clamp(14px,2.5vw,18px);font-weight:400;font-style:italic;color:var(--green-md);line-height:1.6;margin-top:24px;padding-top:24px;border-top:1px solid rgba(200,176,122,.25)}
+
 /* ── RESPONSIVE ─────────────────── */
 @media(max-width:700px){
     .venue-inner{grid-template-columns:1fr;gap:32px}
