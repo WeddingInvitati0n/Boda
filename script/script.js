@@ -25,6 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'auto';
             initScrollReveal();
         }, 1200);
+        // Reproducir música automáticamente al abrir la invitación
+        setTimeout(() => {
+            const audio = document.getElementById('carouselAudio');
+            if (audio && audio.paused) {
+                audio.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(err => {
+                    console.warn('Reproducción automática bloqueada:', err);
+                });
+            }
+        }, 800);
     });
 
     /* ── URL PARAMS ────── */
@@ -111,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ── CUENTA REGRESIVA ─ */
-    const boda = new Date('October 14, 2026 16:30:00').getTime();
+    const boda = new Date('October 14, 2026 15:30:00').getTime();
     const ids  = ['days','hours','minutes','seconds'];
     function tick() {
         const d = boda - Date.now();
