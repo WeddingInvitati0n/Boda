@@ -392,6 +392,14 @@
 .tl-title{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--green-dk)}
 .tl-sub{font-size:12px;font-weight:300;letter-spacing:.04em;color:var(--text-lt);margin-top:3px}
 
+/* ── CÓDIGO DE VESTIMENTA ────────── */
+.dress-code-section{background:var(--green-dk);padding:80px 24px;text-align:center}
+.dress-code-section .section-title{color:#f8f2e4 !important}
+.dress-code-content{max-width:600px;margin:0 auto;padding:48px 24px;position:relative;z-index:1}
+.dress-code-icon{font-size:64px;margin-bottom:20px;display:block;animation:floatFlor 3s ease-in-out infinite}
+.dress-code-text{font-family:var(--serif);font-size:clamp(14px,2.5vw,18px);font-weight:300;font-style:italic;color:#f8f2e4;line-height:1.7;margin:0;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.dress-code-img{width:120px;height:120px;object-fit:contain;margin-bottom:20px;display:block;margin-left:auto;margin-right:auto;animation:floatFlor 3s ease-in-out infinite}
+
 /* ── RSVP CTA ───────────────────── */
 .rsvp-cta-banner{background:var(--parch);border-top:1px solid rgba(200,176,122,.22);border-bottom:1px solid rgba(200,176,122,.22);padding:52px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px}
 .rsvp-cta-text{font-family:var(--serif);font-size:22px;font-style:italic;color:var(--green-dk)}
